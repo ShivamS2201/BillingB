@@ -73,6 +73,32 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return f"{self.user_name}"
+
+
+class Bill_manage_info(models.Model):
+    user_id = models.ForeignKey("NewUSER", verbose_name=_(""), on_delete=models.CASCADE)
+    reason = models.CharField(max_length=100)
+    cin_number = models.CharField(max_length=100)
+    sms_credit = models.IntegerField(max_length=1000)
+    sms_debit = models.IntegerField(max_length=1000)
+    system_credit = models.IntegerField(max_length=1000)
+    system_debit = models.IntegerField(max_length=1000)
+    whatsapp_credit = models.IntegerField(max_length=1000)
+    whatsapp_debit = models.IntegerField(max_length=1000)
+    shortname = models.CharField(max_length=50)
+    pan_card = models.CharField(max_length=16)
+    is_regdealer = models.BooleanField(_("Is regular Dealer"))
+    stateCode = models.IntegerField(max_length=3) #FK
+    gstNum = models.CharField(max_length=14)
+    reg_dealer_type = models.IntegerField() # FK
+    pin_code = models.IntegerField(max_length=5)
+    status_type = models.IntegerField(max_length=2)
+    kyc = models.CharField(max_length=50)
+    landlineNUM = models.IntegerField(max_length=8)
+    actual_billQty = models.BooleanField(_("Bill Quantity"))
+    edit_status = models.BooleanField(_("edit status"))
+    last_updated = models.DateTimeField(auto_now=True)
+    
 '''
 class Roles(models.Model):
 role_name = models.CharField()
