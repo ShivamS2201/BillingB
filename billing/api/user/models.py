@@ -3,20 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUse
 from django.utils.translation import gettext_lazy as _
 # Create your models here.
 # create a model which defines roles:[SuperAdmin, Owner,Dist,Sales,HeadOff,User]
-
-# class Roles(models.Model):
-#     class Role(models.TextChoices):
-#         SUPERUSER = 'SUPERUSER', 'Superuser'
-#         OWNER = 'OWNER','Owner'
-#         DISTRIBUTOR = 'DISTRIBUTOR','Distributor'
-#         SALES = 'SALES','Sales'
-#         HEAD_OFFICE ='HEAD_OFFICE','Head Office'
-#         CUSTOMER = 'CUSTOMER','Customer'
-#         USER = 'USER', 'User'
-#     role_id = models.AutoField(primary_key=True)
-#     role_name = models.CharField(max_length=50,choices=Role.choices)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self,email,user_name,first_name,password,**other_fields):
         other_fields.setdefault('is_staff',True)
@@ -98,27 +84,3 @@ class Bill_manage_info(models.Model):
     actual_billQty = models.BooleanField(_("Bill Quantity"))
     edit_status = models.BooleanField(_("edit status"))
     last_updated = models.DateTimeField(auto_now=True)
-    
-'''
-class Roles(models.Model):
-role_name = models.CharField()
-created_at = models.datetimeNowsetting()
-
-class User (AbstractUser):
-email = email field
-custom user settings
-Role_id = foreign key
-owner ID = default 1 
--------
-default 0
-distID = 
-salesid= 
-hd_id = 
-createdAt 
-updated at
-renew year 
-last login
-status
-renew Year
-last IP
-'''
