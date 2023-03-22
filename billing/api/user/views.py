@@ -1,10 +1,10 @@
 from django.contrib.auth.backends import RemoteUserBackend, UserModel
 from django.contrib.auth.models import Permission, User
 from rest_framework import serializers, viewsets
-from rest_framework import permissions
+from rest_framework import permissions,generics
 from rest_framework.permissions import AllowAny
 from rest_framework.utils.serializer_helpers import JSONBoundField
-from .serializers import UserSerializer  # converted file
+from .serializers import UserSerializer,MSGSerializer  # converted file
 from .models import NewUSER  # the default model
 from django.http import JsonResponse, request
 from django.contrib.auth import get_user_model  # User CHECK BOTTOM
@@ -105,11 +105,19 @@ class RegistrationView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+class MSGInfoView(APIView):
+    def post(self,request):
+        serializer = MSGSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes_by_action = {"create": [AllowAny]}
-    queryset = NewUSER.object.all().order_by("user_name")
+    queryset = NewUSER.object.all().order_by("id")
     serializer_class = UserSerializer
+
 
     def get_permissions(self):
         try:
@@ -124,5 +132,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return super().get_permissions()
 
+class GetUserViewSet(generics.ListAPIView):
+    serializer_class = UserSerializer
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        return NewUSER.object.filter(role_id="1")
 # permission is default method docs

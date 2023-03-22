@@ -66,11 +66,11 @@ class Bill_manage_info(models.Model):
     reason = models.CharField(max_length=100)
     cin_number = models.CharField(max_length=100)
     sms_credit = models.IntegerField(max_length=1000)
-    sms_debit = models.IntegerField(max_length=1000)
+    sms_debit = models.IntegerField(max_length=1000,default=0)
     system_credit = models.IntegerField(max_length=1000)
-    system_debit = models.IntegerField(max_length=1000)
+    system_debit = models.IntegerField(max_length=1000,default=0)
     whatsapp_credit = models.IntegerField(max_length=1000)
-    whatsapp_debit = models.IntegerField(max_length=1000)
+    whatsapp_debit = models.IntegerField(max_length=1000,default=0)
     shortname = models.CharField(max_length=50)
     pan_card = models.CharField(max_length=16)
     is_regdealer = models.BooleanField(_("Is regular Dealer"))
@@ -84,3 +84,22 @@ class Bill_manage_info(models.Model):
     actual_billQty = models.BooleanField(_("Bill Quantity"))
     edit_status = models.BooleanField(_("edit status"))
     last_updated = models.DateTimeField(auto_now=True)
+
+
+    #  "user_id":4,
+    #         "reason":"ABC",
+    #         "cin_number":"12",
+    #         "sms_credit":"11",
+    #         "system_credit":"11",
+    #         "whatsapp_credit":"11",
+    #         "shortname":"Hey",
+    #         "pan_card":"1231231233",
+    #         "is_regdealer":"true",
+    #         "stateCode ":"110085",
+    #         "gstNum ":"1Cvsasdasd",
+    #         "reg_dealer_type":"1",
+    #         "pin_code":"110085",
+    #         "status_type":"1",
+    #         "kyc":"ABCXYZ",
+    #         "landlineNUM":"9999353030",
+    #         "actual_billQty":"100000",
