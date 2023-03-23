@@ -7,7 +7,7 @@ router.register(r'', views.UserViewSet)
 
 urlpatterns = [
     path("register",RegistrationView.as_view(),name="register"),
-    path("register/bill_info/",MSGInfoView.as_view(),name="bill_info"),
+    path("register/bill_info/<int:id>",MSGInfoView.as_view(),name="bill_info"),
     path("login/", views.signin, name="signin"),
     path("logout/<int:id>/", views.signout, name="signout"),
     path("getbyrole/",GetUserViewSet.as_view()),

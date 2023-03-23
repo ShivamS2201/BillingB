@@ -105,13 +105,20 @@ class RegistrationView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Carelfully Use this as it fails user gets deleted
 class MSGInfoView(APIView):
-    def post(self,request):
+    def post(self,request,id):
+        user = get_user_model().object.get(pk=id)
         serializer = MSGSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            ret = serializer.save(id)
+            if ret[1] == True:
+                user.delete() # Caution User will get deleted!!!
+                return Response(ret[0], status=status.HTTP_400_BAD_REQUEST)
+
+            else:
+                return Response("User Created SuccessFully", status=status.HTTP_201_CREATED)
+        
  
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes_by_action = {"create": [AllowAny]}

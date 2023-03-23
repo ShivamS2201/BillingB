@@ -78,8 +78,12 @@ class MSGSerializer(serializers.ModelSerializer):
             "edit_status"
         ]
 
-    def save(self):
-        bill_info = Bill_manage_info(
+    def save(self,id):
+        if len(Bill_manage_info.objects.filter(user_id=id))>1:
+            return "USER Billing entry exists",True
+        else:
+            print(id)
+            bill_info = Bill_manage_info(
             user_id=self.validated_data["user_id"],
             reason=self.validated_data["reason"],
             cin_number=self.validated_data["cin_number"],
@@ -99,8 +103,8 @@ class MSGSerializer(serializers.ModelSerializer):
             actual_billQty = self.validated_data["actual_billQty"],
             edit_status = self.validated_data["edit_status"]
         )
-        bill_info.save()
-        return bill_info
+            bill_info.save()
+            return bill_info,False
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
