@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import authentication_classes, permission_classes  # is
 from .models import Bill_manage_info, NewUSER
@@ -49,10 +51,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only_field = ["is_active", "is_staff", "joining_date", "updated_at"]
 
         # fields = ('name', 'email', 'password','is_active','is_staff','is_superuser',) #section 6 3rd video.
-
-
 class MSGSerializer(serializers.ModelSerializer):
     class Meta:
+
         model = Bill_manage_info
         fields = [
             "user_id",
@@ -105,8 +106,10 @@ class MSGSerializer(serializers.ModelSerializer):
         )
             bill_info.save()
             return bill_info,False
-
-
+    
+    def get(self,id): #get function for Billing info view in viewsets
+        res = Bill_manage_info.objects.filter(user_id = id).values()
+        return res
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     role_id_creator = serializers.CharField(

@@ -30,3 +30,13 @@ edit_status goes through req
 last_updated auto
 
 billing user gets updated need to make constranit to not allow any new creation for same if and need to create Update user field.
+
+
+API:
+Get User billing info: http://127.0.0.1:8000/api/user/register/bill_info/getd/id
+Get USers by all ids depending on hierarchy level:class GetUserViewSet(generics.ListAPIView):
+
+To be made:
+
+-For debit and credit of all msg types depening on confoirmation needs an update in serializers.
+-Count of head office and all other offices.
