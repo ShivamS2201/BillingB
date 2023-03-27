@@ -33,10 +33,12 @@ billing user gets updated need to make constranit to not allow any new creation 
 
 
 API:
-Get User billing info: http://127.0.0.1:8000/api/user/register/bill_info/getd/id
-Get USers by all ids depending on hierarchy level:class GetUserViewSet(generics.ListAPIView):
-
+- Get User billing info: http://127.0.0.1:8000/api/user/register/bill_info/getd/id
+- Get USers by all ids depending on hierarchy level:class --GetUserViewSet(generics.ListAPIView):
+- Get user signed in sign out and
+- Get users as per role.
 To be made:
 
--For debit and credit of all msg types depening on confoirmation needs an update in serializers.
--Count of head office and all other offices.
+- For debit and credit of all msg types depening on confoirmation needs an update in serializers.
+- Count of head office and all other offices.
+- API call and table for State codes to be used in user registeraion and stored in table.
