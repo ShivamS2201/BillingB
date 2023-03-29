@@ -95,8 +95,8 @@ class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            created_key = serializer.save() #save returns the PK of created user 
+            return Response(created_key, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # Carelfully Use this as it fails user gets deleted
 class MSGInfoView(APIView):
@@ -108,9 +108,8 @@ class MSGInfoView(APIView):
             if ret[1] == True:
                 user.delete() # Caution User will get deleted!!!
                 return Response(ret[0], status=status.HTTP_400_BAD_REQUEST)
-
-            else:
-                return Response("User Created SuccessFully", status=status.HTTP_201_CREATED)
+            elif ret[1]==False:
+                return Response(ret[0], status=status.HTTP_201_CREATED)
 class GetMsgInfo(APIView): # Returns Billing info For a current user
     def get(self,request,id):
         serializer = MSGSerializer(data = request.data)

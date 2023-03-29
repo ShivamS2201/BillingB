@@ -60,11 +60,8 @@ class MSGSerializer(serializers.ModelSerializer):
             "reason",
             "cin_number",
             "sms_credit",
-            "sms_debit",
             "system_credit",
-            "system_debit",
             "whatsapp_credit",
-            "whatsapp_debit",
             "shortname",
             "pan_card",
             "is_regdealer",
@@ -83,7 +80,6 @@ class MSGSerializer(serializers.ModelSerializer):
         if len(Bill_manage_info.objects.filter(user_id=id))>1:
             return "USER Billing entry exists",True
         else:
-            print(id)
             bill_info = Bill_manage_info(
             user_id=self.validated_data["user_id"],
             reason=self.validated_data["reason"],
@@ -105,14 +101,17 @@ class MSGSerializer(serializers.ModelSerializer):
             edit_status = self.validated_data["edit_status"]
         )
             bill_info.save()
-            return bill_info,False
+            return "User Created",False
     
     def get(self,id): #get function for Billing info view in viewsets
         res = Bill_manage_info.objects.filter(user_id = id).values()
         return res
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
-    role_id_creator = serializers.CharField(
+    creator_id = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    role_id_of_creator = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
 
@@ -125,31 +124,33 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "user_name",
             "first_name",
             "role_id",
-            "role_id_creator",
+            "creator_id",
+            "role_id_of_creator",
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
     def save(self):
-        creator_id = int(self.validated_data["role_id_creator"])
-        role_id = int(self.validated_data["role_id"])
-        if creator_id < role_id:
-            if creator_id == 2 and role_id != 3:
+        creator_id = int(self.validated_data["creator_id"])
+        role_id_of_creator = int(self.validated_data["role_id_of_creator"])
+        datarole_id = int(self.validated_data["role_id"])
+        if role_id_of_creator < datarole_id:
+            if role_id_of_creator == 2 and datarole_id != 3:
                 raise serializers.ValidationError(
                     {"Error": "Owner can only create Distributor"}
                 )
-            if creator_id == 3 and role_id != 4:
+            if role_id_of_creator == 3 and datarole_id != 4:
                 raise serializers.ValidationError(
                     {"Error": "Distributor can only create Sales"}
                 )
-            if creator_id == 4 and role_id != 5:
+            if role_id_of_creator == 4 and datarole_id != 5:
                 raise serializers.ValidationError(
                     {"Error": "Sales can only create Head Office"}
                 )
-            if creator_id == 5 and role_id != 6:
+            if role_id_of_creator == 5 and datarole_id != 6:
                 raise serializers.ValidationError(
                     {"Error": "Head Office can only create Customer"}
                 )
-            if creator_id == 6 and role_id != 7:
+            if role_id_of_creator == 6 and datarole_id != 7:
                 raise serializers.ValidationError(
                     {"Error": "Customer can only create User"}
                 )
@@ -157,12 +158,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"Role ": "Cannot designate superior role."}
             )
-
-        user = NewUSER(
+        if datarole_id == 4: #if user being created is a sales
+            user = NewUSER(
             email=self.validated_data["email"],
             user_name=self.validated_data["user_name"],
             first_name=self.validated_data["first_name"],
-            role_id=role_id,
+            role_id=datarole_id,
+            distID = creator_id,
         )
         # add logic for user creation here for all levels to be able to create only a lower level component.
         password = self.validated_data["password"]
@@ -171,4 +173,4 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Passwords must match."})
         user.set_password(password)
         user.save()
-        return user
+        return user.pk
