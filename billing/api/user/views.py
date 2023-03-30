@@ -2,10 +2,10 @@ import json
 from django.contrib.auth.backends import RemoteUserBackend, UserModel
 from django.contrib.auth.models import Permission, User
 from rest_framework import serializers, viewsets
-from rest_framework import permissions,generics
+from rest_framework import permissions, generics
 from rest_framework.permissions import AllowAny
 from rest_framework.utils.serializer_helpers import JSONBoundField
-from .serializers import UserSerializer,MSGSerializer  # converted file
+from .serializers import UserSerializer, MSGSerializer  # converted file
 from .models import NewUSER  # the default model
 from django.http import HttpResponse, JsonResponse, request
 from django.contrib.auth import get_user_model  # User CHECK BOTTOM
@@ -20,11 +20,15 @@ from django.contrib.auth import (
 )  # basic login and out functionality  by django
 import random
 from rest_framework.views import APIView
-from rest_framework.response import  Response
-from .serializers import RegistrationSerializer
+from rest_framework.response import Response
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer
+
+
 # Create your views here.
 def home(request):
     return JsonResponse({"info": "Django RC", "name": "API-insider-user"})
+
+
 def generate_session_token(length=10):
     return "".join(
         random.SystemRandom().choice(
@@ -32,6 +36,8 @@ def generate_session_token(length=10):
         )
         for _ in range(10)
     )  # Creates a 10 length string for our session token !!!!!!
+
+
 @csrf_exempt  # this code gets exempted from other origin request
 def signin(request):
     if not request.method == "POST":
@@ -77,6 +83,8 @@ def signin(request):
         return JsonResponse(
             {"error": "Invalid Email"}
         )  # User Model is based on email nam
+
+
 # we previously saved session token in db in record of user
 def signout(request, id):
     logout(request)
@@ -91,35 +99,114 @@ def signout(request, id):
         return JsonResponse({"error": "Invalid user id"})
 
     return JsonResponse({"success": "Logout Successful"})
+
+
 class RegistrationView(APIView):
     def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            created_key = serializer.save() #save returns the PK of created user 
-            return Response(created_key, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if int(request.data["role_id_of_creator"]) < int(request.data["role_id"]):
+            if int(request.data["role_id_of_creator"]) == 2 and int(request.data["role_id"]) == 3:
+                serializer = SalesRegistrationSerializer(
+                    data=request.data
+                )  # change the serializer for dist
+                if serializer.is_valid():
+                    created_key = serializer.save()
+                    return Response(created_key,status=status.HTTP_201_CREATED)
+                else:
+                    return Response(
+                        serializer.ValidationError(
+                            {"Role ": "Cannot designate superior role."}
+                        ),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            elif (
+                int(request.data["role_id_of_creator"]) == 3 and int(request.data["role_id"]) == 4
+            ):
+                serializer = SalesRegistrationSerializer(data=request.data)  # sales ka
+                if serializer.is_valid():
+                    created_key = serializer.save()
+                    return Response(created_key,status=status.HTTP_201_CREATED)
+                else:
+                    return Response(
+                        serializer.ValidationError(
+                            {"Role ": "Cannot designate superior role."}
+                        ),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            elif (
+                int(request.data["role_id_of_creator"]) == 4 and int(request.data["role_id"]) == 5
+            ):
+                serializer = HofficeRegistrationSerializer(data=request.data)  # Hoffice
+                if serializer.is_valid():
+                    created_key = serializer.save()
+                    return Response(created_key,status=status.HTTP_201_CREATED)
+                else:
+                    return Response(
+                        serializer.ValidationError(
+                            {"Role ": "Cannot designate superior role."}
+                        ),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            elif (
+                int(request.data["role_id_of_creator"]) == 5 and int(request.data["role_id"]) == 6
+            ):
+                serializer = SalesRegistrationSerializer(data=request.data)  # Branchka
+                if serializer.is_valid():
+                    created_key = serializer.save()
+                    return Response(created_key,status=status.HTTP_201_CREATED)
+                else:
+                    return Response(
+                        serializer.ValidationError(
+                            {"Role ": "Cannot designate superior role."}
+                        ),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            elif (
+                int(request.data["role_id_of_creator"]) == 6 and int(request.data["role_id"]) == 7
+            ):
+                serializer = SalesRegistrationSerializer(data=request.data)  # CUstomer
+                if serializer.is_valid():
+                    created_key = serializer.save()
+                    return Response(created_key,status=status.HTTP_201_CREATED)
+                else:
+                    return Response(
+                        serializer.ValidationError(
+                            {"Role ": "Cannot designate superior role."}
+                        ),
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            # if something and something serialzier is something and
+            # save returns the PK of created user
+            else:
+                return Response("invalid RoleID and creatorID passedd",status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response("Not Allowed to make the user",status=status.HTTP_400_BAD_REQUEST)
+
+
 # Carelfully Use this as it fails user gets deleted
 class MSGInfoView(APIView):
-    def post(self,request,id):
+    def post(self, request, id):
         user = get_user_model().object.get(pk=id)
-        serializer = MSGSerializer(data = request.data)
+        serializer = MSGSerializer(data=request.data)
         if serializer.is_valid():
             ret = serializer.save(id)
             if ret[1] == True:
-                user.delete() # Caution User will get deleted!!!
+                user.delete()  # Caution User will get deleted!!!
                 return Response(ret[0], status=status.HTTP_400_BAD_REQUEST)
-            elif ret[1]==False:
+            elif ret[1] == False:
                 return Response(ret[0], status=status.HTTP_201_CREATED)
-class GetMsgInfo(APIView): # Returns Billing info For a current user
-    def get(self,request,id):
-        serializer = MSGSerializer(data = request.data)
+
+
+class GetMsgInfo(APIView):  # Returns Billing info For a current user
+    def get(self, request, id):
+        serializer = MSGSerializer(data=request.data)
         Billing_info_data = serializer.get(id)
         return Response(Billing_info_data, status=status.HTTP_200_OK)
+
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes_by_action = {"create": [AllowAny]}
     queryset = NewUSER.object.all().order_by("id")
     serializer_class = UserSerializer
-
 
     def get_permissions(self):
         try:
@@ -133,6 +220,8 @@ class UserViewSet(viewsets.ModelViewSet):
             ]  # default permissions
 
         return super().get_permissions()
+
+
 class GetUserViewSet(generics.ListAPIView):
     serializer_class = UserSerializer
 
@@ -142,4 +231,6 @@ class GetUserViewSet(generics.ListAPIView):
         for the currently authenticated user.
         """
         return NewUSER.object.filter(role_id="1")
+
+
 # permission is default method docs

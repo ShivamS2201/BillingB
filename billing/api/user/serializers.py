@@ -106,15 +106,12 @@ class MSGSerializer(serializers.ModelSerializer):
     def get(self,id): #get function for Billing info view in viewsets
         res = Bill_manage_info.objects.filter(user_id = id).values()
         return res
-class RegistrationSerializer(serializers.ModelSerializer):
+class SalesRegistrationSerializer(serializers.ModelSerializer):
+
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
-    role_id_of_creator = serializers.CharField(
-        style={"input_type": "integer"}, write_only=True
-    )
-
     class Meta:
         model = NewUSER
         fields = [
@@ -131,40 +128,109 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def save(self):
         creator_id = int(self.validated_data["creator_id"])
-        role_id_of_creator = int(self.validated_data["role_id_of_creator"])
         datarole_id = int(self.validated_data["role_id"])
-        if role_id_of_creator < datarole_id:
-            if role_id_of_creator == 2 and datarole_id != 3:
-                raise serializers.ValidationError(
-                    {"Error": "Owner can only create Distributor"}
-                )
-            if role_id_of_creator == 3 and datarole_id != 4:
-                raise serializers.ValidationError(
-                    {"Error": "Distributor can only create Sales"}
-                )
-            if role_id_of_creator == 4 and datarole_id != 5:
-                raise serializers.ValidationError(
-                    {"Error": "Sales can only create Head Office"}
-                )
-            if role_id_of_creator == 5 and datarole_id != 6:
-                raise serializers.ValidationError(
-                    {"Error": "Head Office can only create Customer"}
-                )
-            if role_id_of_creator == 6 and datarole_id != 7:
-                raise serializers.ValidationError(
-                    {"Error": "Customer can only create User"}
-                )
-        else:
-            raise serializers.ValidationError(
-                {"Role ": "Cannot designate superior role."}
-            )
-        if datarole_id == 4: #if user being created is a sales
-            user = NewUSER(
+        # if role_id_of_creator < datarole_id:
+        #     if role_id_of_creator == 2 and datarole_id != 3:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Owner can only create Distributor"}
+        #         )
+        #     if role_id_of_creator == 3 and datarole_id != 4:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Distributor can only create Sales"}
+        #         )
+        #     if role_id_of_creator == 4 and datarole_id != 5:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Sales can only create Head Office"}
+        #         )
+        #     if role_id_of_creator == 5 and datarole_id != 6:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Head Office can only create Customer"}
+        #         )
+        #     if role_id_of_creator == 6 and datarole_id != 7:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Customer can only create User"}
+        #         )
+        # else:
+        #     raise serializers.ValidationError(
+        #         {"Role ": "Cannot designate superior role."}
+        #     )
+        #if user being created is a sales
+        user = NewUSER(
             email=self.validated_data["email"],
             user_name=self.validated_data["user_name"],
             first_name=self.validated_data["first_name"],
             role_id=datarole_id,
             distID = creator_id,
+        )
+        # add logic for user creation here for all levels to be able to create only a lower level component.
+        password = self.validated_data["password"]
+        password2 = self.validated_data["password2"]
+        if password != password2:
+            raise serializers.ValidationError({"password": "Passwords must match."})
+        user.set_password(password)
+        user.save()
+        return user.pk
+
+class HofficeRegistrationSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
+    creator_id = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    dist_ID_data = creator_id = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+
+    class Meta:
+        model = NewUSER
+        fields = [
+            "email",
+            "password",
+            "password2",
+            "user_name",
+            "first_name",
+            "role_id",
+            "creator_id",
+            "dist_ID_data"
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def save(self):
+        creator_id = int(self.validated_data["creator_id"])
+        datarole_id = int(self.validated_data["role_id"])
+        dist_ID_data = int(self.validated_data["dist_ID_data"])
+        # if role_id_of_creator < datarole_id:
+        #     if role_id_of_creator == 2 and datarole_id != 3:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Owner can only create Distributor"}
+        #         )
+        #     if role_id_of_creator == 3 and datarole_id != 4:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Distributor can only create Sales"}
+        #         )
+        #     if role_id_of_creator == 4 and datarole_id != 5:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Sales can only create Head Office"}
+        #         )
+        #     if role_id_of_creator == 5 and datarole_id != 6:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Head Office can only create Customer"}
+        #         )
+        #     if role_id_of_creator == 6 and datarole_id != 7:
+        #         raise serializers.ValidationError(
+        #             {"Error": "Customer can only create User"}
+        #         )
+        # else:
+        #     raise serializers.ValidationError(
+        #         {"Role ": "Cannot designate superior role."}
+        #     )
+        #if user being created is a sales
+        user = NewUSER(
+            email=self.validated_data["email"],
+            user_name=self.validated_data["user_name"],
+            first_name=self.validated_data["first_name"],
+            role_id=datarole_id,
+            distID = dist_ID_data,
+            salesid = creator_id,
         )
         # add logic for user creation here for all levels to be able to create only a lower level component.
         password = self.validated_data["password"]
