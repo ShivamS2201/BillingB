@@ -186,14 +186,18 @@ class RegistrationView(APIView):
 class MSGInfoView(APIView):
     def post(self, request, id):
         user = get_user_model().object.get(pk=id)
+        print("RAN")
         serializer = MSGSerializer(data=request.data)
         if serializer.is_valid():
+            print("RAN")
             ret = serializer.save(id)
             if ret[1] == True:
                 user.delete()  # Caution User will get deleted!!!
-                return Response(ret[0], status=status.HTTP_400_BAD_REQUEST)
+                return Response(ret[0], status=status.HTTP_204_NO_CONTENT)
             elif ret[1] == False:
                 return Response(ret[0], status=status.HTTP_201_CREATED)
+        
+        print("Didn't RAN")
 
 
 class GetMsgInfo(APIView):  # Returns Billing info For a current user

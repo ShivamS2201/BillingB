@@ -42,3 +42,7 @@ To be made:
 - For debit and credit of all msg types depening on confoirmation needs an update in serializers.
 - Count of head office and all other offices.
 - API call and table for State codes to be used in user registeraion and stored in table.
+
+
+
+Changed the Landline num max value as I am passing a 10 sie value from Front. Now works

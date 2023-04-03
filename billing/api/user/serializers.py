@@ -122,7 +122,6 @@ class SalesRegistrationSerializer(serializers.ModelSerializer):
             "first_name",
             "role_id",
             "creator_id",
-            "role_id_of_creator",
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -176,7 +175,7 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
     creator_id = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
-    dist_ID_data = creator_id = serializers.CharField(
+    dist_ID_data = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
 

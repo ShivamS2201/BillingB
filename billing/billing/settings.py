@@ -25,11 +25,12 @@ SECRET_KEY = "django-insecure-46q0vtw))p64sn^lj7y*g8zha^v@i*jc@59^ntz2g8j6%_boi)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','http://localhost:3000/']
+ALLOWED_HOSTS = ['*','http://localhost:3000/','http://localhost:3000/user/dashboard/register/addsales']
 
-
-CORS_ORIGIN_ALLOW_ALL = True
-
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+]
 CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
@@ -46,11 +47,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",

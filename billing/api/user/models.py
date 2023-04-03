@@ -80,7 +80,7 @@ class Bill_manage_info(models.Model):
     pin_code = models.IntegerField(max_length=5)
     status_type = models.IntegerField(max_length=2)
     kyc = models.CharField(max_length=50)
-    landlineNUM = models.IntegerField(max_length=8)
+    landlineNUM = models.IntegerField(max_length=10)
     actual_billQty = models.BooleanField(_("Bill Quantity"))
     edit_status = models.BooleanField(_("edit status"))
     last_updated = models.DateTimeField(auto_now=True)
