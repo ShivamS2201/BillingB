@@ -239,3 +239,86 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user.pk
+    
+class BranchRegisterationSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
+    creator_id = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    dist_ID_data = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    sales_ID_data = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+
+    class Meta:
+        model = NewUSER
+        fields = [
+            "email",
+            "password",
+            "password2",
+            "user_name",
+            "first_name",
+            "role_id",
+            "creator_id",
+            "dist_ID_data",
+            "sales_ID_data"
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def save(self):
+        creator_id = int(self.validated_data["creator_id"])
+        datarole_id = int(self.validated_data["role_id"])
+        dist_ID_data = int(self.validated_data["dist_ID_data"])
+        sales_ID_data = int(self.validated_data["sales_ID_data"])
+
+        user = NewUSER(
+            email=self.validated_data["email"],
+            user_name=self.validated_data["user_name"],
+            first_name=self.validated_data["first_name"],
+            role_id=datarole_id,
+            distID = dist_ID_data,
+            salesid = sales_ID_data,
+            hd_id = creator_id
+        )
+        # add logic for user creation here for all levels to be able to create only a lower level component.
+        password = self.validated_data["password"]
+        password2 = self.validated_data["password2"]
+        if password != password2:
+            raise serializers.ValidationError({"password": "Passwords must match."})
+        user.set_password(password)
+        user.save()
+        return user.pk
+# from distributor---------------------------------------
+class GetSalesNumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewUSER
+        fields =[
+            'id',
+        ]
+    def get(self,getid,role):
+        res = NewUSER.object.filter(distID = getid,role_id =role).values()
+        return res
+
+
+class GetBydistributor(serializers.ModelSerializer):
+    class Meta:
+        model = NewUSER
+        fields =[
+            'id',
+        ]
+    def get(self,getid,role):
+        res = NewUSER.object.filter(distID = getid,role_id =role).values()
+        return res.count()
+
+# class GetBranchNumSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = NewUSER
+#         fields =[
+#             'id',
+#         ]
+#     def get(self,getid,role):
+#         res = NewUSER.object.filter(distID = getid,role_id =role).values()
+#         return res
+#---------------------------------------------------------------------

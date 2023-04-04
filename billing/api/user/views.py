@@ -21,8 +21,7 @@ from django.contrib.auth import (
 import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer
-
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor
 
 # Create your views here.
 def home(request):
@@ -113,9 +112,8 @@ class RegistrationView(APIView):
                     return Response(created_key,status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        serializer.ValidationError(
-                            {"Role ": "Cannot designate superior role."}
-                        ),
+                        {"Role ": "Cannot designate superior role."}
+                        ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             elif (
@@ -127,9 +125,8 @@ class RegistrationView(APIView):
                     return Response(created_key,status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        serializer.ValidationError(
-                            {"Role ": "Cannot designate superior role."}
-                        ),
+                        {"Role ": "Cannot designate superior role."}
+                        ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             elif (
@@ -141,23 +138,21 @@ class RegistrationView(APIView):
                     return Response(created_key,status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        serializer.ValidationError(
-                            {"Role ": "Cannot designate superior role."}
-                        ),
+                        {"Role ": "Cannot designate superior role."}
+                        ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             elif (
                 int(request.data["role_id_of_creator"]) == 5 and int(request.data["role_id"]) == 6
             ):
-                serializer = SalesRegistrationSerializer(data=request.data)  # Branchka
+                serializer = BranchRegisterationSerializer(data=request.data)  # Branchka
                 if serializer.is_valid():
                     created_key = serializer.save()
                     return Response(created_key,status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        serializer.ValidationError(
-                            {"Role ": "Cannot designate superior role."}
-                        ),
+                        {"Role ": "Cannot designate superior role."}
+                        ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             elif (
@@ -169,9 +164,8 @@ class RegistrationView(APIView):
                     return Response(created_key,status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        serializer.ValidationError(
-                            {"Role ": "Cannot designate superior role."}
-                        ),
+                        {"Role ": "Cannot designate superior role."}
+                        ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             # if something and something serialzier is something and
@@ -199,6 +193,17 @@ class MSGInfoView(APIView):
         
         print("Didn't RAN")
 
+
+class GetBydistributorview(APIView):
+    def get(self,request,id,role):
+        serializer = GetBydistributor(data = request.data)
+        GetsalesCnt = serializer.get(id,role)
+        return Response(GetsalesCnt,status=status.HTTP_200_OK)
+# class GetHONum(APIView):
+#     def get(self,request,id,role):
+#         serializer = GetHONumSerializer(data = request.data)
+#         GetsalesCnt = serializer.get(id,role)
+#         return Response(GetsalesCnt,status=status.HTTP_200_OK)
 
 class GetMsgInfo(APIView):  # Returns Billing info For a current user
     def get(self, request, id):
