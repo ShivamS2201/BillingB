@@ -291,22 +291,23 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
         user.save()
         return user.pk
 # from distributor---------------------------------------
-class GetSalesNumSerializer(serializers.ModelSerializer):
+class GetSalesByDist(serializers.ModelSerializer):
     class Meta:
-        model = NewUSER
-        fields =[
-            'id',
-        ]
-    def get(self,getid,role):
-        res = NewUSER.object.filter(distID = getid,role_id =role).values()
-        return res
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        data = NewUSER.object.filter(distID = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        # for ele in data:
+        #     ele.pop("password")
+        #     ele.pop("sess_token") #anything to be deleted
+        return data
 
 
 class GetBydistributor(serializers.ModelSerializer):
     class Meta:
         model = NewUSER
         fields =[
-            'id',
+            "id"
         ]
     def get(self,getid,role):
         res = NewUSER.object.filter(distID = getid,role_id =role).values()

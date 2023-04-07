@@ -21,7 +21,7 @@ from django.contrib.auth import (
 import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist
 
 # Create your views here.
 def home(request):
@@ -193,7 +193,12 @@ class MSGInfoView(APIView):
         
         print("Didn't RAN")
 
-
+class GetSalesTable(APIView):
+    def get(self,request,id,distid):
+        serializer = GetSalesByDist(data = request.data)
+        TableData = serializer.getTable(id,distid)
+        return Response(TableData)
+    
 class GetBydistributorview(APIView):
     def get(self,request,id,role):
         serializer = GetBydistributor(data = request.data)
