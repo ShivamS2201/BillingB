@@ -21,7 +21,7 @@ from django.contrib.auth import (
 import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales
 
 # Create your views here.
 def home(request):
@@ -204,6 +204,17 @@ class GetBydistributorview(APIView):
         serializer = GetBydistributor(data = request.data)
         GetsalesCnt = serializer.get(id,role)
         return Response(GetsalesCnt,status=status.HTTP_200_OK)
+    #_______________________________________________________sales level
+class GetHOTable(APIView):
+    def get(self,request,id,distid):
+        serializer = GetHObySales(data = request.data)
+        TableData = serializer.getTable(id,distid)
+        return Response(TableData)
+class GetBySalesview(APIView):
+    def get(self,request,id,role):
+        serializer = GetBysales(data = request.data)
+        GetHOCnt = serializer.get(id,role)
+        return Response(GetHOCnt,status=status.HTTP_200_OK)
 # class GetHONum(APIView):
 #     def get(self,request,id,role):
 #         serializer = GetHONumSerializer(data = request.data)
