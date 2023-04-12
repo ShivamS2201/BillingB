@@ -41,6 +41,7 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
     user_name = models.CharField(max_length=150,unique=True)
     first_name = models.CharField(max_length=150,blank=True)
     role_id = models.CharField(max_length=50,choices=Role.choices)
+    owner_id = models.IntegerField(('Owner ID'),default=0,max_length=3)
     distID = models.IntegerField(('Distributor ID'),default=0,max_length=3)
     salesid= models.IntegerField(('Sales ID'),default=0,max_length=3)
     hd_id = models.IntegerField(('Head Office ID'),default=0,max_length=3)

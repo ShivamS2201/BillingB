@@ -21,7 +21,7 @@ from django.contrib.auth import (
 import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales,GetByOwner,GetSalesByOwner,GetHOByOwner,GetBrByOwner,GetDistributorByOwner,DistributorRegisterationSerializer
 
 # Create your views here.
 def home(request):
@@ -103,8 +103,9 @@ def signout(request, id):
 class RegistrationView(APIView):
     def post(self, request):
         if int(request.data["role_id_of_creator"]) < int(request.data["role_id"]):
+            print( int(request.data["role_id_of_creator"]) , int(request.data["role_id"]))
             if int(request.data["role_id_of_creator"]) == 2 and int(request.data["role_id"]) == 3:
-                serializer = SalesRegistrationSerializer(
+                serializer = DistributorRegisterationSerializer(
                     data=request.data
                 )  # change the serializer for dist
                 if serializer.is_valid():
@@ -116,9 +117,7 @@ class RegistrationView(APIView):
                         ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (
-                int(request.data["role_id_of_creator"]) == 3 and int(request.data["role_id"]) == 4
-            ):
+            elif (int(request.data["role_id_of_creator"]) == 3 and int(request.data["role_id"]) == 4):
                 serializer = SalesRegistrationSerializer(data=request.data)  # sales ka
                 if serializer.is_valid():
                     created_key = serializer.save()
@@ -129,9 +128,7 @@ class RegistrationView(APIView):
                         ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (
-                int(request.data["role_id_of_creator"]) == 4 and int(request.data["role_id"]) == 5
-            ):
+            elif (int(request.data["role_id_of_creator"]) == 4 and int(request.data["role_id"]) == 5):
                 serializer = HofficeRegistrationSerializer(data=request.data)  # Hoffice
                 if serializer.is_valid():
                     created_key = serializer.save()
@@ -142,9 +139,7 @@ class RegistrationView(APIView):
                         ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (
-                int(request.data["role_id_of_creator"]) == 5 and int(request.data["role_id"]) == 6
-            ):
+            elif (int(request.data["role_id_of_creator"]) == 5 and int(request.data["role_id"]) == 6):
                 serializer = BranchRegisterationSerializer(data=request.data)  # Branchka
                 if serializer.is_valid():
                     created_key = serializer.save()
@@ -155,9 +150,7 @@ class RegistrationView(APIView):
                         ,
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (
-                int(request.data["role_id_of_creator"]) == 6 and int(request.data["role_id"]) == 7
-            ):
+            elif (int(request.data["role_id_of_creator"]) == 6 and int(request.data["role_id"]) == 7):
                 serializer = SalesRegistrationSerializer(data=request.data)  # CUstomer
                 if serializer.is_valid():
                     created_key = serializer.save()
@@ -171,7 +164,7 @@ class RegistrationView(APIView):
             # if something and something serialzier is something and
             # save returns the PK of created user
             else:
-                return Response("invalid RoleID and creatorID passedd",status=status.HTTP_404_NOT_FOUND)
+                return Response("invalid RoleID and creatorID passed",status=status.HTTP_404_NOT_FOUND)
         else:
             return Response("Not Allowed to make the user",status=status.HTTP_400_BAD_REQUEST)
 
@@ -193,17 +186,43 @@ class MSGInfoView(APIView):
         
         print("Didn't RAN")
 
-class GetSalesTable(APIView):
-    def get(self,request,id,distid):
-        serializer = GetSalesByDist(data = request.data)
-        TableData = serializer.getTable(id,distid)
-        return Response(TableData)
-    
+#Owner-------------------------------------
+class GetDistributorTableByOwner(APIView):
+    def get(self,request,id,role):
+        serializer = GetDistributorByOwner(data = request.data)
+        HOdata = serializer.getTable(id,role)
+        return Response(HOdata,status=status.HTTP_200_OK)
+class GetHOTablebyOwner(APIView):
+    def get(self,request,id,role):
+        serializer = GetHOByOwner(data = request.data)
+        HOdata = serializer.getTable(id,role)
+        return Response(HOdata,status=status.HTTP_200_OK)
+class GetSalesTablebyOwner(APIView):
+    def get(self,request,id,role):
+        serializer = GetSalesByOwner(data = request.data)
+        salesdata = serializer.getTable(id,role)
+        return Response(salesdata,status=status.HTTP_200_OK)
+class GetBrTablebyOwner(APIView):
+    def get(self,request,id,role):
+        serializer = GetBrByOwner(data = request.data)
+        HOdata = serializer.getTable(id,role)
+        return Response(HOdata,status=status.HTTP_200_OK)
+class GetByOwnerview(APIView):
+    def get(self,request,id,role):
+        serializer = GetByOwner(data = request.data)
+        GetCnt = serializer.get(id,role)
+        return Response(GetCnt,status=status.HTTP_200_OK)
+#------------------------------------------------------
 class GetBydistributorview(APIView):
     def get(self,request,id,role):
         serializer = GetBydistributor(data = request.data)
         GetsalesCnt = serializer.get(id,role)
         return Response(GetsalesCnt,status=status.HTTP_200_OK)
+class GetSalesTable(APIView):
+    def get(self,request,id,distid):
+        serializer = GetSalesByDist(data = request.data)
+        TableData = serializer.getTable(id,distid)
+        return Response(TableData)
     #_______________________________________________________sales level
 class GetHOTable(APIView):
     def get(self,request,id,distid):

@@ -106,8 +106,7 @@ class MSGSerializer(serializers.ModelSerializer):
     def get(self,id): #get function for Billing info view in viewsets
         res = Bill_manage_info.objects.filter(user_id = id).values()
         return res
-class SalesRegistrationSerializer(serializers.ModelSerializer):
-
+class DistributorRegisterationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
@@ -128,6 +127,49 @@ class SalesRegistrationSerializer(serializers.ModelSerializer):
     def save(self):
         creator_id = int(self.validated_data["creator_id"])
         datarole_id = int(self.validated_data["role_id"])
+        user = NewUSER(
+            email=self.validated_data["email"],
+            user_name=self.validated_data["user_name"],
+            first_name=self.validated_data["first_name"],
+            role_id=datarole_id,
+            owner_id = creator_id,
+        )
+        # add logic for user creation here for all levels to be able to create only a lower level component.
+        password = self.validated_data["password"]
+        password2 = self.validated_data["password2"]
+        if password != password2:
+            raise serializers.ValidationError({"password": "Passwords must match."})
+        user.set_password(password)
+        user.save()
+        return user.pk
+# Need to make a URL view and Front end mai creator id as owner ID
+class SalesRegistrationSerializer(serializers.ModelSerializer):
+
+    password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
+    creator_id = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    owner_id_data =  serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
+    class Meta:
+        model = NewUSER
+        fields = [
+            "email",
+            "password",
+            "password2",
+            "user_name",
+            "first_name",
+            "role_id",
+            "creator_id",
+            "owner_id_data"
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def save(self):
+        creator_id = int(self.validated_data["creator_id"])
+        datarole_id = int(self.validated_data["role_id"])
+        owner_id_data = int(self.validated_data["owner_id_data"])
         # if role_id_of_creator < datarole_id:
         #     if role_id_of_creator == 2 and datarole_id != 3:
         #         raise serializers.ValidationError(
@@ -160,6 +202,7 @@ class SalesRegistrationSerializer(serializers.ModelSerializer):
             first_name=self.validated_data["first_name"],
             role_id=datarole_id,
             distID = creator_id,
+            owner_id = owner_id_data
         )
         # add logic for user creation here for all levels to be able to create only a lower level component.
         password = self.validated_data["password"]
@@ -178,6 +221,9 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
     dist_ID_data = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
+    owner_id_data = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
 
     class Meta:
         model = NewUSER
@@ -189,7 +235,8 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
             "first_name",
             "role_id",
             "creator_id",
-            "dist_ID_data"
+            "dist_ID_data",
+            "owner_id_data"
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -197,6 +244,8 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
         creator_id = int(self.validated_data["creator_id"])
         datarole_id = int(self.validated_data["role_id"])
         dist_ID_data = int(self.validated_data["dist_ID_data"])
+        owner_id_data = int(self.validated_data["owner_id_data"])
+
         # if role_id_of_creator < datarole_id:
         #     if role_id_of_creator == 2 and datarole_id != 3:
         #         raise serializers.ValidationError(
@@ -230,6 +279,7 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
             role_id=datarole_id,
             distID = dist_ID_data,
             salesid = creator_id,
+            owner_id = owner_id_data
         )
         # add logic for user creation here for all levels to be able to create only a lower level component.
         password = self.validated_data["password"]
@@ -251,7 +301,9 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
     sales_ID_data = serializers.CharField(
         style={"input_type": "integer"}, write_only=True
     )
-
+    owner_id_data = serializers.CharField(
+        style={"input_type": "integer"}, write_only=True
+    )
     class Meta:
         model = NewUSER
         fields = [
@@ -263,7 +315,8 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
             "role_id",
             "creator_id",
             "dist_ID_data",
-            "sales_ID_data"
+            "sales_ID_data",
+            "owner_id_data"
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -272,6 +325,7 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
         datarole_id = int(self.validated_data["role_id"])
         dist_ID_data = int(self.validated_data["dist_ID_data"])
         sales_ID_data = int(self.validated_data["sales_ID_data"])
+        owner_id_data = int(self.validated_data["owner_id_data"])
 
         user = NewUSER(
             email=self.validated_data["email"],
@@ -280,7 +334,8 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
             role_id=datarole_id,
             distID = dist_ID_data,
             salesid = sales_ID_data,
-            hd_id = creator_id
+            hd_id = creator_id,
+            owner_id = owner_id_data
         )
         # add logic for user creation here for all levels to be able to create only a lower level component.
         password = self.validated_data["password"]
@@ -290,6 +345,45 @@ class BranchRegisterationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user.pk
+# from owner ------------------------------------------------
+class GetByOwner(serializers.ModelSerializer): # returns all counts of all present users under this name.
+    class Meta:
+        model = NewUSER
+        fields =[
+            "id"
+        ]
+    def get(self,getid,role):
+        res = NewUSER.object.filter(owner_id = getid,role_id =role).values()
+        return res.count()
+class GetDistributorByOwner(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        return data
+class GetSalesByOwner(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        return data
+class GetHOByOwner(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        return data
+class GetBrByOwner(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        return data
+
 # from distributor---------------------------------------
 class GetSalesByDist(serializers.ModelSerializer):
     class Meta:
@@ -301,8 +395,6 @@ class GetSalesByDist(serializers.ModelSerializer):
         #     ele.pop("password")
         #     ele.pop("sess_token") #anything to be deleted
         return data
-
-
 class GetBydistributor(serializers.ModelSerializer):
     class Meta:
         model = NewUSER
@@ -312,7 +404,7 @@ class GetBydistributor(serializers.ModelSerializer):
     def get(self,getid,role):
         res = NewUSER.object.filter(distID = getid,role_id =role).values()
         return res.count()
-#---------------------------------------------------------------------------------
+#------from sales---------------------------------------------------------------------------
 class GetHObySales(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
