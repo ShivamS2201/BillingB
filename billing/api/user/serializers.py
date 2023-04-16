@@ -6,8 +6,7 @@ from .models import Bill_manage_info, NewUSER
 from django.contrib.auth.hashers import (
     make_password,
 )  # brings passwords in clear text format and Hashes it
-
-
+from collections import ChainMap
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop("password", None)
@@ -21,15 +20,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.save()
         return instance
 
-    def update(self, instance, validated_data):
+    def update(self, validated_data): #works
         for attr, val in validated_data.items():
             if attr == "password":  # for password updation we creat this.
-                instance.set_password(val)
+                self.instance.set_password(val)
             else:
-                setattr(instance, attr, val)
+                setattr(self.instance, attr, val)
 
-        instance.save()
-        return instance
+        self.instance.save()
+        return self.instance
 
     class Meta:
         model = NewUSER  # model to serialize
@@ -106,6 +105,15 @@ class MSGSerializer(serializers.ModelSerializer):
     def get(self,id): #get function for Billing info view in viewsets
         res = Bill_manage_info.objects.filter(user_id = id).values()
         return res
+    def update(self,validated_data):
+        for attr, val in validated_data.items():
+           if attr =="user_id":
+               value = NewUSER.object.get(pk=val)
+               setattr(self.instance,attr,value)
+           elif attr =="landlineNUM":
+               setattr(self.instance, attr, val)
+        self.instance.save()
+        return self.instance
 class DistributorRegisterationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
@@ -142,7 +150,6 @@ class DistributorRegisterationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user.pk
-# Need to make a URL view and Front end mai creator id as owner ID
 class SalesRegistrationSerializer(serializers.ModelSerializer):
 
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
@@ -367,22 +374,41 @@ class GetSalesByOwner(serializers.ModelSerializer):
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
-        return data
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
 class GetHOByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
-        return data
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
 class GetBrByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
-        return data
+        resp=[]
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID","salesid","hd_id")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            hdid = NewUSER.object.filter(id = ele["hd_id"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"],"first_name_HO":hdid[0]["first_name"]}, ele)
+            resp.append(ele)
+
+        return resp
 
 # from distributor---------------------------------------
 class GetSalesByDist(serializers.ModelSerializer):

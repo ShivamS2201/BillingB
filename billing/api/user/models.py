@@ -59,7 +59,7 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = ['user_name','first_name','role_id']
 
     def __str__(self):
-        return f"{self.user_name}"
+        return f"{self.email}"
 
 
 class Bill_manage_info(models.Model):
@@ -85,6 +85,9 @@ class Bill_manage_info(models.Model):
     actual_billQty = models.BooleanField(_("Bill Quantity"))
     edit_status = models.BooleanField(_("edit status"))
     last_updated = models.DateTimeField(auto_now=True)
+
+    REQUIRED_FIELDS = ['user_id','landlineNUM']
+
 
 
     #  "user_id":4,

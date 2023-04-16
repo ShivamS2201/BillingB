@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetSalesTable,GetBySalesview,GetHOTable,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner
+from .views import GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetSalesTable,GetBySalesview,GetHOTable,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData
 router = routers.DefaultRouter()
 router.register(r'', views.UserViewSet)
 urlpatterns = [
@@ -20,6 +20,9 @@ urlpatterns = [
     path("register/hodata/<int:id>/<int:distid>",GetHOTable.as_view()),
     path("logout/<int:id>/", views.signout, name="signout"),
     path("getbyrole/",GetUserViewSet.as_view()), #gets user by role
-    path('',include(router.urls))
+    path('',include(router.urls)),
+    path("update/<int:id>",UpdateViewSet.as_view(),name="update_USER"),# register user needs more contraints to make usable
+    path("update/Bill/<int:id>",UpdateMsgData.as_view(),name="update_BILL"),# register user needs more contraints to make usable
+
     # path("", views.home, name="user.home"),
 ]

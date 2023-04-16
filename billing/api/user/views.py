@@ -6,7 +6,7 @@ from rest_framework import permissions, generics
 from rest_framework.permissions import AllowAny
 from rest_framework.utils.serializer_helpers import JSONBoundField
 from .serializers import UserSerializer, MSGSerializer  # converted file
-from .models import NewUSER  # the default model
+from .models import NewUSER,Bill_manage_info  # the default model
 from django.http import HttpResponse, JsonResponse, request
 from django.contrib.auth import get_user_model  # User CHECK BOTTOM
 from rest_framework import status
@@ -98,6 +98,24 @@ def signout(request, id):
         return JsonResponse({"error": "Invalid user id"})
 
     return JsonResponse({"success": "Logout Successful"})
+
+class UpdateViewSet(APIView):
+    def put(self,request,id):
+        instance = NewUSER.object.get(pk=id)
+        serializer = UserSerializer(instance,request.data)
+        if serializer.is_valid():
+            serializer.update(request.data)
+        return Response(id,status=status.HTTP_200_OK)
+
+class UpdateMsgData(APIView):
+     def put(self,request,id):
+        instance = Bill_manage_info.objects.get(user_id=id)
+        print(instance)
+        serializer = MSGSerializer(instance,request.data)
+        if serializer.is_valid():
+            serializer.update(request.data)
+        return Response("POST in Update",status=status.HTTP_200_OK)
+
 
 
 class RegistrationView(APIView):
