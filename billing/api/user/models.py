@@ -50,7 +50,7 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
     renew_year = models.IntegerField(max_length=2,default=1)
     last_ip = models.GenericIPAddressField(default='192.168.0.1')
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     sess_token = models.CharField(max_length=10,default=0)
     
     object = CustomAccountManager()

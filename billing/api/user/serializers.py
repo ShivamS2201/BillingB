@@ -367,7 +367,7 @@ class GetDistributorByOwner(serializers.ModelSerializer):
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","joining_date","first_name","email","is_active","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
         return data
 class GetSalesByOwner(serializers.ModelSerializer):
     class Meta:
