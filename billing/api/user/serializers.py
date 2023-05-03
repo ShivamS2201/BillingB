@@ -24,6 +24,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         for attr, val in validated_data.items():
             if attr == "password":  # for password updation we creat this.
                 self.instance.set_password(val)
+            elif attr == "system_debit":  # for password updation we creat this.
+                self.instance.set_password(val)
             else:
                 setattr(self.instance, attr, val)
 
@@ -34,7 +36,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = NewUSER  # model to serialize
         fields = [
             "id",
-            "user_name",
             "email",
             "first_name",
             "role_id",
@@ -106,14 +107,30 @@ class MSGSerializer(serializers.ModelSerializer):
         res = Bill_manage_info.objects.filter(user_id = id).values()
         return res
     def update(self,validated_data):
+
+        print(validated_data["system_credit"])
         for attr, val in validated_data.items():
            if attr =="user_id":
                value = NewUSER.object.get(pk=val)
                setattr(self.instance,attr,value)
+           elif attr =="edit_status" or attr =="actual_billQty" or attr =="is_regdealer":
+               setattr(self.instance, attr, bool(val)) 
            elif attr =="landlineNUM":
                setattr(self.instance, attr, val)
+           elif (attr =="system_credit" or attr =="sms_credit" or attr =="whatsapp_credit") and int(validated_data[attr])<0:
+               return [False,"Cannot do debit in 0 balance"]
+           elif (attr =="system_credit") and int(validated_data[attr])>0:
+               setattr(self.instance,attr,int(val) - int(validated_data["system_debit"]))
+           elif (attr =="sms_credit") and int(validated_data[attr])>0:
+               setattr(self.instance,attr,int(val) - int(validated_data["sms_debit"]))
+           elif (attr =="whatsapp_credit") and int(validated_data[attr])>0:
+               setattr(self.instance,attr,int(val) - int(validated_data["whatsapp_debit"])) 
+           elif (attr =="system_debit" or attr =="sms_debit" or attr =="whatsapp_debit"):
+               setattr(self.instance,attr,val)
+           else:
+               setattr(self.instance,attr,val)
         self.instance.save()
-        return self.instance
+        return self.instance.pk
 class DistributorRegisterationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
@@ -362,12 +379,15 @@ class GetByOwner(serializers.ModelSerializer): # returns all counts of all prese
     def get(self,getid,role):
         res = NewUSER.object.filter(owner_id = getid,role_id =role).values()
         return res.count()
+    def getUser(self,getid): #gets user for update in owner level form
+        res = NewUSER.object.filter(id = getid).values("first_name","email","user_name","id","role_id","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","bill_manage_info__reason","bill_manage_info__kyc","bill_manage_info__gstNum","bill_manage_info__pan_card","bill_manage_info__stateCode","bill_manage_info__is_regdealer","bill_manage_info__actual_billQty","bill_manage_info__edit_status","bill_manage_info__reg_dealer_type","bill_manage_info__pin_code","bill_manage_info__status_type","bill_manage_info__cin_number","bill_manage_info__shortname")
+        return res
 class GetDistributorByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","joining_date","first_name","email","is_active","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","joining_date","first_name","email","is_active","role_id","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","renew_year","bill_manage_info__reason","bill_manage_info__kyc","bill_manage_info__gstNum","bill_manage_info__pan_card","bill_manage_info__stateCode","bill_manage_info__is_regdealer","bill_manage_info__actual_billQty","bill_manage_info__edit_status","bill_manage_info__reg_dealer_type","bill_manage_info__pin_code","bill_manage_info__status_type","bill_manage_info__cin_number","bill_manage_info__shortname")
         return data
 class GetSalesByOwner(serializers.ModelSerializer):
     class Meta:

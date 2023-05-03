@@ -99,7 +99,7 @@ def signout(request, id):
 
     return JsonResponse({"success": "Logout Successful"})
 
-class UpdateViewSet(APIView):
+class UpdateViewSet(APIView): # Updates current user which is logged in 
     def put(self,request,id):
         instance = NewUSER.object.get(pk=id)
         serializer = UserSerializer(instance,request.data)
@@ -107,16 +107,23 @@ class UpdateViewSet(APIView):
             serializer.update(request.data)
         return Response(id,status=status.HTTP_200_OK)
 
-class UpdateMsgData(APIView):
+class UpdateMsgData(APIView): #Update message information either of current user or any created user.
      def put(self,request,id):
         instance = Bill_manage_info.objects.get(user_id=id)
-        print(instance)
         serializer = MSGSerializer(instance,request.data)
         if serializer.is_valid():
-            serializer.update(request.data)
-        return Response("POST in Update",status=status.HTTP_200_OK)
+            resp = serializer.update(request.data)
+        return Response("Success",status=status.HTTP_200_OK)
 
 
+class GetUserForms(APIView):
+    def get(self,request,id):
+        serializer = GetByOwner(data = request.data)
+        if serializer.is_valid():
+            userresp = serializer.getUser(id)
+            return Response(userresp,status=status.HTTP_200_OK)
+        else: 
+            return Response("NAHI aya",status=status.HTTP_404_NOT_FOUND)
 
 class RegistrationView(APIView):
     def post(self, request):
