@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'api',
     'api.user',
+    'api.bills',
     'corsheaders'
 ]
 

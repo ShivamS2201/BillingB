@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetSalesTable,GetBySalesview,GetHOTable,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData
+from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetBySalesview,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData,GetSalesByDview,GetHobyDview,GetBrbyDview,GetHObysalesview,GetBrbysalesview
 router = routers.DefaultRouter()
 router.register(r'', views.UserViewSet)
 urlpatterns = [
@@ -16,8 +16,11 @@ urlpatterns = [
     path("register/ownersalesdata/<int:id>/<int:role>",GetSalesTablebyOwner.as_view()),
     path("register/ownerBrdata/<int:id>/<int:role>",GetBrTablebyOwner.as_view()),
     path("register/ownerHOdata/<int:id>/<int:role>",GetHOTablebyOwner.as_view()),
-    path("register/salesdata/<int:id>/<int:distid>",GetSalesTable.as_view()),
-    path("register/hodata/<int:id>/<int:distid>",GetHOTable.as_view()),
+    path("register/distsalesdata/<int:id>/<int:role>",GetSalesByDview.as_view()),
+    path("register/distHOdata/<int:id>/<int:role>",GetHobyDview.as_view()),
+    path("register/distBrdata/<int:id>/<int:role>",GetBrbyDview.as_view()),
+    path("register/saleshodata/<int:id>/<int:role>",GetHObysalesview.as_view()),
+    path("register/salesbrdata/<int:id>/<int:role>",GetBrbysalesview.as_view()),
     path("logout/<int:id>/", views.signout, name="signout"),
     path("getbyrole/",GetUserViewSet.as_view()), #gets user by role
     path('',include(router.urls)),

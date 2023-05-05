@@ -21,7 +21,7 @@ from django.contrib.auth import (
 import random
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales,GetByOwner,GetSalesByOwner,GetHOByOwner,GetBrByOwner,GetDistributorByOwner,DistributorRegisterationSerializer
+from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales,GetByOwner,GetSalesByOwner,GetHOByOwner,GetBrByOwner,GetDistributorByOwner,DistributorRegisterationSerializer,GetHOByDist,GetBrByDist,GetBrbysales
 
 # Create your views here.
 def home(request):
@@ -243,17 +243,33 @@ class GetBydistributorview(APIView):
         serializer = GetBydistributor(data = request.data)
         GetsalesCnt = serializer.get(id,role)
         return Response(GetsalesCnt,status=status.HTTP_200_OK)
-class GetSalesTable(APIView):
-    def get(self,request,id,distid):
+class GetSalesByDview(APIView):
+    def get(self,request,id,role):
         serializer = GetSalesByDist(data = request.data)
-        TableData = serializer.getTable(id,distid)
+        TableData = serializer.getTable(id,role)
+        return Response(TableData)
+class GetHobyDview(APIView):
+    def get(self,request,id,role):
+        serializer = GetHOByDist(data = request.data)
+        TableData = serializer.getTable(id,role)
+        return Response(TableData)
+class GetBrbyDview(APIView):
+    def get(self,request,id,role):
+        serializer = GetBrByDist(data = request.data)
+        TableData = serializer.getTable(id,role)
         return Response(TableData)
     #_______________________________________________________sales level
-class GetHOTable(APIView):
-    def get(self,request,id,distid):
+class GetHObysalesview(APIView):
+    def get(self,request,id,role):
         serializer = GetHObySales(data = request.data)
-        TableData = serializer.getTable(id,distid)
+        TableData = serializer.getTable(id,role)
         return Response(TableData)
+class GetBrbysalesview(APIView):
+    def get(self,request,id,role):
+        serializer = GetBrbysales(data = request.data)
+        TableData = serializer.getTable(id,role)
+        return Response(TableData)
+    
 class GetBySalesview(APIView):
     def get(self,request,id,role):
         serializer = GetBysales(data = request.data)

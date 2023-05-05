@@ -236,7 +236,6 @@ class SalesRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user.pk
-
 class HofficeRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
@@ -312,8 +311,7 @@ class HofficeRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Passwords must match."})
         user.set_password(password)
         user.save()
-        return user.pk
-    
+        return user.pk   
 class BranchRegisterationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
     creator_id = serializers.CharField(
@@ -395,7 +393,7 @@ class GetSalesByOwner(serializers.ModelSerializer):
 
     def getTable(self,id,role):
         resp = []
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","joining_date","first_name","email","renew_year","is_active","role_id","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID")
         for ele in data:
             dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
             ele = ChainMap({"first_name_dist":dist[0]["first_name"]}, ele)
@@ -407,7 +405,7 @@ class GetHOByOwner(serializers.ModelSerializer):
 
     def getTable(self,id,role):
         resp = []
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","renew_year","is_active","role_id","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID")
         for ele in data:
             dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
             sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
@@ -420,7 +418,7 @@ class GetBrByOwner(serializers.ModelSerializer):
 
     def getTable(self,id,role):
         resp=[]
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID","salesid","hd_id")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","renew_year","is_active","role_id","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID","salesid","hd_id")
         for ele in data:
             dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
             sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
@@ -436,11 +434,35 @@ class GetSalesByDist(serializers.ModelSerializer):
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(distID = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
-        # for ele in data:
-        #     ele.pop("password")
-        #     ele.pop("sess_token") #anything to be deleted
+        data = NewUSER.object.filter(distID = id,role_id =role).values("id","role_id","renew_year","is_active","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
         return data
+class GetHOByDist(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(distID = id,role_id =role).values("id","renew_year","is_active","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
+class GetBrByDist(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(distID = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","distID","salesid","hd_id")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            hdid = NewUSER.object.filter(id = ele["hd_id"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"],"first_name_HO":hdid[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
 class GetBydistributor(serializers.ModelSerializer):
     class Meta:
         model = NewUSER
@@ -456,11 +478,28 @@ class GetHObySales(serializers.ModelSerializer):
         model = Bill_manage_info
 
     def getTable(self,id,role):
-        data = NewUSER.object.filter(salesid = id,role_id =role).values("joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit")
-        # for ele in data:
-        #     ele.pop("password")
-        #     ele.pop("sess_token") #anything to be deleted
-        return data
+        resp = []
+        data = NewUSER.object.filter(salesid = id,role_id =role).values("id","renew_year","is_active","role_id","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
+class GetBrbysales(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+
+    def getTable(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(salesid = id,role_id =role).values("id","renew_year","is_active","role_id","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID","salesid","hd_id")
+        for ele in data:
+            dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+            sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+            hdid = NewUSER.object.filter(id = ele["hd_id"]).values("first_name")
+            ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"],"first_name_HO":hdid[0]["first_name"]}, ele)
+            resp.append(ele)
+        return resp
 class GetBysales(serializers.ModelSerializer):
     class Meta:
         model = NewUSER
