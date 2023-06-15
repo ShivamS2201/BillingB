@@ -5,8 +5,6 @@ class Bill_Account_type(models.Model):
     account_type_name = models.CharField(max_length=20)
     date_time = models.DateTimeField(auto_now=True) # updated at
     status = models.BooleanField(default=True)
-
-
     def __str__(self):
         return self.account_type_name
 
