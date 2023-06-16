@@ -50,3 +50,16 @@ Changed the Landline num max value as I am passing a 10 sie value from Front. No
 
 error in :
 search table malfunctioning
+
+<br>
+____________________________________________________________________________________________________<br>
+Each new Branch Customer or 
+After Head Office the Branch is actually Customer Master? No The Master in HO makes the Branch with extra details.
+
+Bank in head office is related to table Bill_banks
+<br>
+Place - Bill_place*(to be made)
+Sales - Bill_sale*
+Customer - bill_Customer**
+Recept - Bill_recept
+Payement - Bill_payement  

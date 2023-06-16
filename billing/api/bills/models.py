@@ -20,7 +20,10 @@ class Bill_banks(models.Model):
     #StateCode = 
     gstNumber = models.ForeignKey("user.Bill_manage_info",on_delete=models.CASCADE)
     account_type = models.ForeignKey(Bill_Account_type,on_delete=models.CASCADE) 
-    open_balance = models.IntegerField(max_length=5)
+    open_balance = models.CharField(max_length=10)
     Primary_type = models.BooleanField()
     modify_date = models.DateTimeField(auto_now=True)
     created_at = models.DateField(auto_created=True)
+
+    def __str__(self):
+        return self.bank_name
