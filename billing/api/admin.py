@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StateCode
+from .models import StateCodes
 # Register your models here.
-admin.site.register(StateCode)
+admin.site.register(StateCodes)
 # Register your models here.

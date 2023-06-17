@@ -63,3 +63,19 @@ Sales - Bill_sale*
 Customer - bill_Customer**
 Recept - Bill_recept
 Payement - Bill_payement  
+
+
+To be added from the backend <br> 
+Banks   &#x2713; <br>
+account type and &#x2713; <br>
+State Codes &#x2713; <br>
+
+----------------------------------------------
+To Be added in Bak end 17/6/23
+1. Add All entries for making counts and functionaloty on HO level in a closed container
+2. All the higher levels functionality are to be covered into a authcontainer so that no unauthorised or in volutry url access can happen. <br>
+
+<kbd>
+DB1: billing old database
+DB2: Billing New Database- (17/06/23)
+</kbd>

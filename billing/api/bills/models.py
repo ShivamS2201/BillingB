@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 class Bill_Account_type(models.Model):
     account_type_name = models.CharField(max_length=20)
@@ -17,7 +19,7 @@ class Bill_banks(models.Model):
     account_num = models.IntegerField("Account Number",max_length=50)
     ifsc_code = models.CharField(max_length=20)
     Branch =models.CharField(max_length=20)
-    #StateCode = 
+    StateCode = models.ForeignKey("api.StateCodes",verbose_name=_("State Code"),on_delete=models.CASCADE)
     gstNumber = models.ForeignKey("user.Bill_manage_info",on_delete=models.CASCADE)
     account_type = models.ForeignKey(Bill_Account_type,on_delete=models.CASCADE) 
     open_balance = models.CharField(max_length=10)

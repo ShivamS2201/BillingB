@@ -86,7 +86,7 @@ WSGI_APPLICATION = "billing.wsgi.application"
 DATABASES = {
    'default':{
       'ENGINE':'django.db.backends.postgresql_psycopg2',
-      'NAME':'billing',
+      'NAME':'Billing', # Billing for new DB
       'USER':'postgres',
       'PASSWORD':'2023_PSJshizi.@', #use it from an env file
       'HOST':'localhost',

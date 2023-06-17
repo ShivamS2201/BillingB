@@ -63,7 +63,7 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
 
 
 class Bill_manage_info(models.Model):
-    user_id = models.ForeignKey("NewUSER", verbose_name=_(""), on_delete=models.CASCADE)
+    user_id = models.ForeignKey("NewUSER", verbose_name=_("User"), on_delete=models.CASCADE)
     reason = models.CharField(max_length=100)
     cin_number = models.CharField(max_length=100)
     sms_credit = models.IntegerField(max_length=1000)
@@ -75,7 +75,7 @@ class Bill_manage_info(models.Model):
     shortname = models.CharField(max_length=50)
     pan_card = models.CharField(max_length=16)
     is_regdealer = models.BooleanField(_("Is regular Dealer"))
-    stateCode = models.IntegerField(max_length=3) #FK
+    stateCode = models.ForeignKey("api.StateCodes",verbose_name=_("State Code"),on_delete=models.CASCADE) #FK
     gstNum = models.CharField(max_length=14)
     reg_dealer_type = models.IntegerField() # FK
     pin_code = models.IntegerField(max_length=5)
@@ -88,7 +88,7 @@ class Bill_manage_info(models.Model):
 
     REQUIRED_FIELDS = ['user_id','landlineNUM']
     def __str__(self):
-        return f"{self.gstNum}"
+        return f"{self.user_id.first_name}"
 
 
 
