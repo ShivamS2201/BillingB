@@ -25,7 +25,17 @@ class Bill_banks(models.Model):
     open_balance = models.CharField(max_length=10)
     Primary_type = models.BooleanField()
     modify_date = models.DateTimeField(auto_now=True)
-    created_at = models.DateField(auto_created=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.bank_name
+    
+class Bill_Cash(models.Model):
+    user_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    cash_name =  models.CharField("Cash_name",max_length=100)
+    cash_balance = models.IntegerField("Cash Balance",max_length=10) # can vary and need to see the correct value **
+    add_date = models.DateTimeField(auto_now_add=True)
+    modify_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.cash_name

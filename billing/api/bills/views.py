@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,AddBanks
+from .serializers import GetBankTable,AddBanks,GetBanks
 from rest_framework.response import Response
 from api.serializers import GetStateCodes
 from .serializers import GetAccounttype
@@ -17,6 +17,20 @@ class hoAddBank(APIView):
         serializer = AddBanks(data = request.data)
         if serializer.is_valid():
             re = serializer.save()
+            return Response(re)
+        
+class HOgetBank(APIView):
+    def get(self,request,id):
+        serializer = GetBanks(data = request.data)
+        if serializer.is_valid():
+            re = serializer.get(id)
+            return Response(re)
+        
+class FetchBankdetail(APIView):
+    def get(self,request,id):
+        serializer = GetBanks(data = request.data)
+        if serializer.is_valid():
+            re = serializer.bankdetail(id)
             return Response(re)
         
 class StateCodesBank(APIView):

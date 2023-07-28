@@ -79,3 +79,9 @@ To Be added in Bak end 17/6/23
 DB1: billing old database
 DB2: Billing New Database- (17/06/23)
 </kbd>
+
+----------------------------------------<br>
+- Add cash to database aneed to add all the variants of other masters by tomorrow. 
+Change the error and success message, and put it up to every master<br>
+- Create forms and serialzers for masters and see the GST number issue too.
+
