@@ -1,27 +1,47 @@
 import json
-from django.contrib.auth.backends import RemoteUserBackend, UserModel
-from django.contrib.auth.models import Permission, User
-from rest_framework import serializers, viewsets
-from rest_framework import permissions, generics
-from rest_framework.permissions import AllowAny
-from rest_framework.utils.serializer_helpers import JSONBoundField
-from .serializers import UserSerializer, MSGSerializer  # converted file
-from .models import NewUSER,Bill_manage_info  # the default model
-from django.http import HttpResponse, JsonResponse, request
+import random
+import re
+
 from django.contrib.auth import get_user_model  # User CHECK BOTTOM
-from rest_framework import status
+from django.contrib.auth import (  # basic login and out functionality  by django
+    login,
+    logout,
+)
+from django.contrib.auth.backends import RemoteUserBackend, UserModel
+from django.contrib.auth.models import Permission
+from django.http import HttpResponse, JsonResponse, request
 from django.views.decorators.csrf import (
     csrf_exempt,
 )  # for saving from cross site request forgery CHECK BOTTOMimport random
-import re
-from django.contrib.auth import (
-    login,
-    logout,
-)  # basic login and out functionality  by django
-import random
-from rest_framework.views import APIView
+from rest_framework import generics, permissions, serializers, status, viewsets
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from .serializers import SalesRegistrationSerializer, HofficeRegistrationSerializer,BranchRegisterationSerializer,GetBydistributor,GetSalesByDist,GetBysales,GetHObySales,GetByOwner,GetSalesByOwner,GetHOByOwner,GetBrByOwner,GetDistributorByOwner,DistributorRegisterationSerializer,GetHOByDist,GetBrByDist,GetBrbysales
+from rest_framework.utils.serializer_helpers import JSONBoundField
+from rest_framework.views import APIView
+
+from .models import Bill_manage_info, NewUSER  # the default model
+from .serializers import (
+    BranchRegisterationSerializer,  # converted file
+    DistributorRegisterationSerializer,
+    GetBrByDist,
+    GetBrByOwner,
+    GetBrbysales,
+    GetBydistributor,
+    GetByOwner,
+    GetBysales,
+    GetDistributorByOwner,
+    GetHOByDist,
+    GetHOByOwner,
+    GetHObySales,
+    GetSalesByDist,
+    GetSalesByOwner,
+    HofficeRegistrationSerializer,
+    MSGSerializer,
+    SalesRegistrationSerializer,
+    UserSerializer,
+    GetBrbyHO
+)
+
 
 # Create your views here.
 def home(request):
@@ -99,99 +119,121 @@ def signout(request, id):
 
     return JsonResponse({"success": "Logout Successful"})
 
-class UpdateViewSet(APIView): # Updates current user which is logged in 
-    def put(self,request,id):
+
+class UpdateViewSet(APIView):  # Updates current user which is logged in
+    def put(self, request, id):
         instance = NewUSER.object.get(pk=id)
-        serializer = UserSerializer(instance,request.data)
+        serializer = UserSerializer(instance, request.data)
         if serializer.is_valid():
             serializer.update(request.data)
-        return Response(id,status=status.HTTP_200_OK)
+        return Response(id, status=status.HTTP_200_OK)
 
-class UpdateMsgData(APIView): #Update message information either of current user or any created user.
-     def put(self,request,id):
+
+class UpdateMsgData(
+    APIView
+):  # Update message information either of current user or any created user.
+    def put(self, request, id):
         instance = Bill_manage_info.objects.get(user_id=id)
-        serializer = MSGSerializer(instance,request.data)
+        serializer = MSGSerializer(instance, request.data)
         if serializer.is_valid():
             resp = serializer.update(request.data)
-        return Response("Success",status=status.HTTP_200_OK)
+        return Response("Success", status=status.HTTP_200_OK)
 
 
 class GetUserForms(APIView):
-    def get(self,request,id):
-        serializer = GetByOwner(data = request.data)
+    def get(self, request, id):
+        serializer = GetByOwner(data=request.data)
         if serializer.is_valid():
             userresp = serializer.getUser(id)
-            return Response(userresp,status=status.HTTP_200_OK)
-        else: 
-            return Response("NAHI aya",status=status.HTTP_404_NOT_FOUND)
+            return Response(userresp, status=status.HTTP_200_OK)
+        else:
+            return Response("NAHI aya", status=status.HTTP_404_NOT_FOUND)
+
 
 class RegistrationView(APIView):
     def post(self, request):
         if int(request.data["role_id_of_creator"]) < int(request.data["role_id"]):
-            print( int(request.data["role_id_of_creator"]) , int(request.data["role_id"]))
-            if int(request.data["role_id_of_creator"]) == 2 and int(request.data["role_id"]) == 3:
+            print(int(request.data["role_id_of_creator"]), int(request.data["role_id"]))
+            if (
+                int(request.data["role_id_of_creator"]) == 2
+                and int(request.data["role_id"]) == 3
+            ):
                 serializer = DistributorRegisterationSerializer(
                     data=request.data
                 )  # change the serializer for dist
                 if serializer.is_valid():
                     created_key = serializer.save()
-                    return Response(created_key,status=status.HTTP_201_CREATED)
+                    return Response(created_key, status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        {"Role ": "Cannot designate superior role."}
-                        ,
+                        {"Role ": "Cannot designate superior role."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (int(request.data["role_id_of_creator"]) == 3 and int(request.data["role_id"]) == 4):
+            elif (
+                int(request.data["role_id_of_creator"]) == 3
+                and int(request.data["role_id"]) == 4
+            ):
                 serializer = SalesRegistrationSerializer(data=request.data)  # sales ka
                 if serializer.is_valid():
                     created_key = serializer.save()
-                    return Response(created_key,status=status.HTTP_201_CREATED)
+                    return Response(created_key, status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        {"Role ": "Cannot designate superior role."}
-                        ,
+                        {"Role ": "Cannot designate superior role."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (int(request.data["role_id_of_creator"]) == 4 and int(request.data["role_id"]) == 5):
+            elif (
+                int(request.data["role_id_of_creator"]) == 4
+                and int(request.data["role_id"]) == 5
+            ):
                 serializer = HofficeRegistrationSerializer(data=request.data)  # Hoffice
                 if serializer.is_valid():
                     created_key = serializer.save()
-                    return Response(created_key,status=status.HTTP_201_CREATED)
+                    return Response(created_key, status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        {"Role ": "Cannot designate superior role."}
-                        ,
+                        {"Role ": "Cannot designate superior role."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (int(request.data["role_id_of_creator"]) == 5 and int(request.data["role_id"]) == 6):
-                serializer = BranchRegisterationSerializer(data=request.data)  # Branchka
+            elif (
+                int(request.data["role_id_of_creator"]) == 5
+                and int(request.data["role_id"]) == 6
+            ):
+                serializer = BranchRegisterationSerializer(
+                    data=request.data
+                )  # Branchka
                 if serializer.is_valid():
                     created_key = serializer.save()
-                    return Response(created_key,status=status.HTTP_201_CREATED)
+                    return Response(created_key, status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        {"Role ": "Cannot designate superior role."}
-                        ,
+                        {"Role ": "Cannot designate superior role."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            elif (int(request.data["role_id_of_creator"]) == 6 and int(request.data["role_id"]) == 7):
+            elif (
+                int(request.data["role_id_of_creator"]) == 6
+                and int(request.data["role_id"]) == 7
+            ):
                 serializer = SalesRegistrationSerializer(data=request.data)  # CUstomer
                 if serializer.is_valid():
                     created_key = serializer.save()
-                    return Response(created_key,status=status.HTTP_201_CREATED)
+                    return Response(created_key, status=status.HTTP_201_CREATED)
                 else:
                     return Response(
-                        {"Role ": "Cannot designate superior role."}
-                        ,
+                        {"Role ": "Cannot designate superior role."},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             # if something and something serialzier is something and
             # save returns the PK of created user
             else:
-                return Response("invalid RoleID and creatorID passed",status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    "invalid RoleID and creatorID passed",
+                    status=status.HTTP_404_NOT_FOUND,
+                )
         else:
-            return Response("Not Allowed to make the user",status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Not Allowed to make the user", status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 # Carelfully Use this as it fails user gets deleted
@@ -208,78 +250,113 @@ class MSGInfoView(APIView):
                 return Response(ret[0], status=status.HTTP_204_NO_CONTENT)
             elif ret[1] == False:
                 return Response(ret[0], status=status.HTTP_201_CREATED)
-        
+
         print("Didn't RAN")
 
-#Owner-------------------------------------
+
+# Owner-------------------------------------
 class GetDistributorTableByOwner(APIView):
-    def get(self,request,id,role):
-        serializer = GetDistributorByOwner(data = request.data)
-        HOdata = serializer.getTable(id,role)
-        return Response(HOdata,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetDistributorByOwner(data=request.data)
+        HOdata = serializer.getTable(id, role)
+        return Response(HOdata, status=status.HTTP_200_OK)
+
+
 class GetHOTablebyOwner(APIView):
-    def get(self,request,id,role):
-        serializer = GetHOByOwner(data = request.data)
-        HOdata = serializer.getTable(id,role)
-        return Response(HOdata,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetHOByOwner(data=request.data)
+        HOdata = serializer.getTable(id, role)
+        return Response(HOdata, status=status.HTTP_200_OK)
+
+
 class GetSalesTablebyOwner(APIView):
-    def get(self,request,id,role):
-        serializer = GetSalesByOwner(data = request.data)
-        salesdata = serializer.getTable(id,role)
-        return Response(salesdata,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetSalesByOwner(data=request.data)
+        salesdata = serializer.getTable(id, role)
+        return Response(salesdata, status=status.HTTP_200_OK)
+
+
 class GetBrTablebyOwner(APIView):
-    def get(self,request,id,role):
-        serializer = GetBrByOwner(data = request.data)
-        HOdata = serializer.getTable(id,role)
-        return Response(HOdata,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetBrByOwner(data=request.data)
+        HOdata = serializer.getTable(id, role)
+        return Response(HOdata, status=status.HTTP_200_OK)
+
+
 class GetByOwnerview(APIView):
-    def get(self,request,id,role):
-        serializer = GetByOwner(data = request.data)
-        GetCnt = serializer.get(id,role)
-        return Response(GetCnt,status=status.HTTP_200_OK)
-#------------------------------------------------------
+    def get(self, request, id, role):
+        serializer = GetByOwner(data=request.data)
+        GetCnt = serializer.get(id, role)
+        return Response(GetCnt, status=status.HTTP_200_OK)
+
+
+# ------------------------------------------------------
 class GetBydistributorview(APIView):
-    def get(self,request,id,role):
-        serializer = GetBydistributor(data = request.data)
-        GetsalesCnt = serializer.get(id,role)
-        return Response(GetsalesCnt,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetBydistributor(data=request.data)
+        GetsalesCnt = serializer.get(id, role)
+        return Response(GetsalesCnt, status=status.HTTP_200_OK)
+
+
 class GetSalesByDview(APIView):
-    def get(self,request,id,role):
-        serializer = GetSalesByDist(data = request.data)
-        TableData = serializer.getTable(id,role)
+    def get(self, request, id, role):
+        serializer = GetSalesByDist(data=request.data)
+        TableData = serializer.getTable(id, role)
         return Response(TableData)
+
+
 class GetHobyDview(APIView):
-    def get(self,request,id,role):
-        serializer = GetHOByDist(data = request.data)
-        TableData = serializer.getTable(id,role)
+    def get(self, request, id, role):
+        serializer = GetHOByDist(data=request.data)
+        TableData = serializer.getTable(id, role)
         return Response(TableData)
+
+
 class GetBrbyDview(APIView):
-    def get(self,request,id,role):
-        serializer = GetBrByDist(data = request.data)
-        TableData = serializer.getTable(id,role)
+    def get(self, request, id, role):
+        serializer = GetBrByDist(data=request.data)
+        TableData = serializer.getTable(id, role)
         return Response(TableData)
-    #_______________________________________________________sales level
+
+    # _______________________________________________________sales level
+
+
 class GetHObysalesview(APIView):
-    def get(self,request,id,role):
-        serializer = GetHObySales(data = request.data)
-        TableData = serializer.getTable(id,role)
+    def get(self, request, id, role):
+        serializer = GetHObySales(data=request.data)
+        TableData = serializer.getTable(id, role)
         return Response(TableData)
+
+
 class GetBrbysalesview(APIView):
-    def get(self,request,id,role):
-        serializer = GetBrbysales(data = request.data)
-        TableData = serializer.getTable(id,role)
+    def get(self, request, id, role):
+        serializer = GetBrbysales(data=request.data)
+        TableData = serializer.getTable(id, role)
         return Response(TableData)
-    
+
+
 class GetBySalesview(APIView):
-    def get(self,request,id,role):
-        serializer = GetBysales(data = request.data)
-        GetHOCnt = serializer.get(id,role)
-        return Response(GetHOCnt,status=status.HTTP_200_OK)
+    def get(self, request, id, role):
+        serializer = GetBysales(data=request.data)
+        GetHOCnt = serializer.get(id, role)
+        return Response(GetHOCnt, status=status.HTTP_200_OK)
+
+
 # class GetHONum(APIView):
 #     def get(self,request,id,role):
 #         serializer = GetHONumSerializer(data = request.data)
 #         GetsalesCnt = serializer.get(id,role)
 #         return Response(GetsalesCnt,status=status.HTTP_200_OK)
+#------------------------HO Level-----
+class GetBrbyHOview(APIView):
+    def get(self,request,id,role):
+        serializer = GetBrbyHO(data = request.data)
+        if serializer.is_valid():
+            resp = serializer.getTable(id,role)
+            return Response({"response":resp},status=status.HTTP_202_ACCEPTED) # depending on the response if data->table is rendered else a message is shwn.
+        else:
+            return Response({"response":"error"},status=status.HTTP_400_BAD_REQUEST)
+
 
 class GetMsgInfo(APIView):  # Returns Billing info For a current user
     def get(self, request, id):

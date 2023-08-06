@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,AddBanks,GetBanks
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash
 from rest_framework.response import Response
 from api.serializers import GetStateCodes
 from .serializers import GetAccounttype
+from rest_framework import status
+from .models import Bill_Cash,Bill_banks
 # Create your views here.
 class getBankTable(APIView):
     def get(self,request,id):
@@ -11,28 +13,65 @@ class getBankTable(APIView):
         if serializer.is_valid():
             TableData = serializer.getTable(id)
             return Response(TableData)
-
 class hoAddBank(APIView):
     def post(seld,request,id):
         serializer = AddBanks(data = request.data)
         if serializer.is_valid():
             re = serializer.save()
-            return Response(re)
-        
+            return Response(re)      
 class HOgetBank(APIView):
     def get(self,request,id):
         serializer = GetBanks(data = request.data)
         if serializer.is_valid():
             re = serializer.get(id)
-            return Response(re)
-        
+            return Response(re)      
 class FetchBankdetail(APIView):
     def get(self,request,id):
         serializer = GetBanks(data = request.data)
         if serializer.is_valid():
             re = serializer.bankdetail(id)
             return Response(re)
-        
+class Update_Bank(APIView):
+    def put(self,request,id):
+        instance =  Bill_banks.objects.get(id = id)
+        serializer = AddBanks(instance,data = request.data)
+        if serializer.is_valid():
+            resp = serializer.update_bank(request.data)
+        return Response("Bank Detail Updated",status=status.HTTP_200_OK)
+     
+
+class getCashTable(APIView):
+    def get(self,request,id):
+        serializer = GetCashTable(data = request.data)
+        if serializer.is_valid():
+            TableData = serializer.getTable(id)
+            return Response(TableData)
+class HOAddCash(APIView):
+    def post(seld,request,id):
+        serializer = AddCash(data = request.data)
+        if serializer.is_valid():
+            re = serializer.save()
+            return Response(re)
+class HOgetCash(APIView):
+    def get(self,request,id):
+        serializer = GetCash(data = request.data)
+        if serializer.is_valid():
+            re = serializer.get(id)
+            return Response(re)
+class FetchCashdetail(APIView):
+    def get(self,request,id):
+        serializer = GetCash(data = request.data)
+        if serializer.is_valid():
+            re = serializer.cashdetail(id)
+            return Response(re)
+class Update_Cash(APIView):
+    def put(self,request,id):
+        instance =  Bill_Cash.objects.get(id = id)
+        serializer = AddCash(instance,data = request.data)
+        if serializer.is_valid():
+            resp = serializer.update_cash(request.data)
+        return Response("Cash Detail Updated",status=status.HTTP_200_OK)
+
 class StateCodesBank(APIView):
     def get(self,request):
         serializer = GetStateCodes(data=request.data)

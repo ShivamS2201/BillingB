@@ -23,7 +23,7 @@ class Bill_banks(models.Model):
     gstNumber = models.CharField(max_length=15)#models.ForeignKey("user.Bill_manage_info",on_delete=models.CASCADE)
     account_type = models.ForeignKey(Bill_Account_type,on_delete=models.CASCADE) 
     open_balance = models.CharField(max_length=10)
-    Primary_type = models.BooleanField()
+    Primary_type = models.BooleanField(default=True)
     modify_date = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -38,4 +38,4 @@ class Bill_Cash(models.Model):
     modify_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.cash_name
+        return self.cash_name   

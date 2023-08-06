@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetBySalesview,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData,GetSalesByDview,GetHobyDview,GetBrbyDview,GetHObysalesview,GetBrbysalesview
+from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetBySalesview,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData,GetSalesByDview,GetHobyDview,GetBrbyDview,GetHObysalesview,GetBrbysalesview,GetBrbyHOview
 router = routers.DefaultRouter()
 router.register(r'', views.UserViewSet)
 urlpatterns = [
@@ -21,6 +21,7 @@ urlpatterns = [
     path("register/distBrdata/<int:id>/<int:role>",GetBrbyDview.as_view()),
     path("register/saleshodata/<int:id>/<int:role>",GetHObysalesview.as_view()),
     path("register/salesbrdata/<int:id>/<int:role>",GetBrbysalesview.as_view()),
+    path("register/hobrdata/<int:id>/<int:role>",GetBrbyHOview.as_view(),name="Table of BR for Ho"),
     path("logout/<int:id>/", views.signout, name="signout"),
     path("getbyrole/",GetUserViewSet.as_view()), #gets user by role
     path('',include(router.urls)),

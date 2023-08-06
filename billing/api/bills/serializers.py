@@ -1,7 +1,8 @@
 from collections import ChainMap
 from rest_framework import serializers
 from rest_framework.decorators import authentication_classes, permission_classes  # is
-from .models import Bill_banks, Bill_Account_type
+from .models import Bill_banks, Bill_Account_type,Bill_Cash
+from api.user.models import NewUSER
 from api.models import StateCodes
 class GetBankTable(serializers.ModelSerializer):
     class Meta:
@@ -46,7 +47,6 @@ class AddBanks(serializers.ModelSerializer):
             "gstNumber",
             "account_type",
             "open_balance",
-            "Primary_type",
         ]
 
     def save(self):
@@ -60,12 +60,73 @@ class AddBanks(serializers.ModelSerializer):
             gstNumber=self.validated_data["gstNumber"],
             account_type=self.validated_data["account_type"],
             open_balance=self.validated_data["open_balance"],
-            Primary_type=self.validated_data["Primary_type"],
         )
         HOBANK.save()
         return r'{self.vaidated["bank_name"]} Added.'
+    def update_bank(self,validated_data):
+        for attr,val in validated_data.items():
+            if attr=="user_id":
+                value = NewUSER.object.get(pk=val)
+                setattr(self.instance,attr,value)
+            elif attr == "StateCode":
+                value = StateCodes.objects.get(pk=val)
+                setattr(self.instance,attr,value)
+            elif attr =="account_type":
+                value = Bill_Account_type.objects.get(pk=val)
+                setattr(self.instance,attr,value)
+            else:
+                setattr(self.instance,attr,val)
+        self.instance.save()
+        return self.instance
 
-   
+class GetCashTable(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_Cash
+        fields = ["id"]
+
+    def getTable(self, id):
+        data = Bill_Cash.objects.filter(user_id=id).values()
+        print(data)
+        return data
+class GetCash(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_Cash
+        fields = ["id"]
+    
+    def get(self,id):
+        # returns user created bank count.
+        res = Bill_Cash.objects.filter(user_id = id).values()
+        return res.count()
+    def cashdetail(self,id):
+        res = Bill_Cash.objects.filter(pk=id).values() # returns bank with the id.
+        print(res)
+        return res
+class AddCash(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_Cash
+        fields = [
+            "user_id",
+            "cash_name",
+            "cash_balance",
+        ]
+
+    def save(self):
+        HOCash = Bill_Cash(
+        user_id = self.validated_data["user_id"] ,
+        cash_name = self.validated_data["cash_name"] ,
+        cash_balance = self.validated_data["cash_balance"] 
+        )
+        HOCash.save()
+        return 'data saved'
+    def update_cash(self,validated_data):
+        for attr,val in validated_data.items():
+            if attr=="user_id":
+                value = NewUSER.object.get(pk=val)
+                setattr(self.instance,attr,value)
+            else:
+                setattr(self.instance,attr,val)
+        self.instance.save()
+        return self.instance
 
 
 class GetAccounttype(serializers.ModelSerializer):

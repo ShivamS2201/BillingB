@@ -509,7 +509,28 @@ class GetBysales(serializers.ModelSerializer):
     def get(self,getid,role):
         res = NewUSER.object.filter(salesid = getid,role_id =role).values()
         return res.count()
+# ------------------From HO--------------------
+class GetBrbyHO(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_manage_info
+        fields =[
+            "id"
+        ]
+        
 
+    def getTable(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(hd_id = id,role_id =role).values("id","renew_year","is_active","role_id","joining_date","first_name","email","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","salesid","distID","salesid","hd_id")
+        if data:
+            for ele in data:
+                dist = NewUSER.object.filter(id = ele["distID"]).values("first_name")
+                sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
+                hdid = NewUSER.object.filter(id = ele["hd_id"]).values("first_name")
+                ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"],"first_name_HO":hdid[0]["first_name"]}, ele)
+                resp.append(ele)
+            return resp
+        else:
+            return False
 # class GetBranchNumSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = NewUSER
