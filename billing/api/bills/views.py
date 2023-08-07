@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup
 from rest_framework.response import Response
 from api.serializers import GetStateCodes
 from .serializers import GetAccounttype
@@ -85,4 +85,24 @@ class Accountype(APIView):
         if serializer.is_valid():
             res = serializer.AccType()
             return Response(res)
+
+class HOAddPlace(APIView):
+    def post(self,request):
+        serializer = AddPlace(data=request.data)
+        if serializer.is_valid():
+            re = serializer.save()
+            return Response(re,status=status.HTTP_100_CONTINUE)
+
+class HOAddGroup(APIView):
+    def post(self,request):
+        serializer = AddGroup(data=request.data)
+        if serializer.is_valid():
+            re = serializer.save()
+            return Response({"response":re},status=status.HTTP_100_CONTINUE)
         
+class HOAddCategory(APIView):
+    def post(self,request):
+        serializer = AddCategory(data=request.data)
+        if serializer.is_valid():
+            re = serializer.save()
+            return Response({"response":re},status=status.HTTP_100_CONTINUE)

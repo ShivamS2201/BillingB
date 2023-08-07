@@ -39,3 +39,21 @@ class Bill_Cash(models.Model):
 
     def __str__(self):
         return self.cash_name   
+
+class Places(models.Model):
+    master_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    place_name = models.CharField("Places",max_length=100)
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+class Group(models.Model):
+    master_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    cust_grp = models.CharField("Group",max_length=100)
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+class Category(models.Model):
+    master_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    cat_name = models.CharField("Category",max_length=100)
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)

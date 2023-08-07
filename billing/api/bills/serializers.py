@@ -1,7 +1,7 @@
 from collections import ChainMap
 from rest_framework import serializers
 from rest_framework.decorators import authentication_classes, permission_classes  # is
-from .models import Bill_banks, Bill_Account_type,Bill_Cash
+from .models import Bill_banks, Bill_Account_type,Bill_Cash,Places,Group,Category
 from api.user.models import NewUSER
 from api.models import StateCodes
 class GetBankTable(serializers.ModelSerializer):
@@ -137,3 +137,33 @@ class GetAccounttype(serializers.ModelSerializer):
     def AccType(self):
         data = Bill_Account_type.objects.filter().values("id", "account_type_name")
         return data
+
+class AddPlace(serializers.ModelSerializer):
+    class Meta:
+        model = Places
+        fields = ["master_id","place_name"]
+
+    def save(self):
+        res = Places(master_id=self.validated_data["master_id"],place_name=self.validated_data["place_name"])
+        res.save()
+        return "Place Added "
+    
+class AddGroup(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["master_id","cust_grp"]
+
+    def save(self):
+        res = Group(master_id=self.validated_data["master_id"],cust_grp=self.validated_data["cust_grp"])
+        res.save()
+        return "Group Added"
+    
+class AddCategory(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["master_id","cat_name"]
+
+    def save(self):
+        res = Category(master_id=self.validated_data["master_id"],cat_name=self.validated_data["cat_name"])
+        res.save()
+        return "Category Added"

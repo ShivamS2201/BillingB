@@ -1,19 +1,22 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace
 
 router = routers.DefaultRouter()
 
 urlpatterns = [
     path("getBank/HO/<int:id>",getBankTable.as_view(),name="Banks"),
+    path("getcash/HO/<int:id>",getCashTable.as_view()), # passes bank id from table
     path("bank/HO/addbank/<int:id>",hoAddBank.as_view()),
+    path("bank/HO/addcash/<int:id>",HOAddCash.as_view()), # passes bank id from table
     path("bank/HO/getBankcnt/<int:id>",HOgetBank.as_view()),# passes userid
     path("bank/HO/editbank/<int:id>",Update_Bank.as_view()), # passes bank id from table
     path("bank/HO/fetchbank/<int:id>",FetchBankdetail.as_view()), # passes bank id from table,
     path("bank/HO/fetchcash/<int:id>",FetchCashdetail.as_view()), # passes bank id from table
-    path("bank/HO/addcash/<int:id>",HOAddCash.as_view()), # passes bank id from table
-    path("getcash/HO/<int:id>",getCashTable.as_view()), # passes bank id from table
     path("bank/HO/editcash/<int:id>",Update_Cash.as_view()), # passes bank id from table
+    path("bank/HO/addplace/",HOAddPlace.as_view()),
+    path("bank/HO/addgroup/",HOAddGroup.as_view()),
+    path("bank/HO/addcategory/",HOAddCategory.as_view()),
     path("bank/HO/addbank/stateCodes/",StateCodesBank.as_view()),
     path("bank/HO/addbank/acctype/",Accountype.as_view()),
     
