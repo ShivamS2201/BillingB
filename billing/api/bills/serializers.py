@@ -167,3 +167,33 @@ class AddCategory(serializers.ModelSerializer):
         res = Category(master_id=self.validated_data["master_id"],cat_name=self.validated_data["cat_name"])
         res.save()
         return "Category Added"
+
+class GetPlaceTable(serializers.ModelSerializer):
+    class Meta:
+        model = Places
+        fields = ["id"]
+
+    def getTable(self, id):
+        data = Places.objects.filter(master_id=id).values()
+        print(data)
+        return data
+    
+class GetGroupTable(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id"]
+
+    def getTable(self, id):
+        data = Group.objects.filter(master_id=id).values()
+        print(data)
+        return data
+    
+class GetCategoryTable(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id"]
+
+    def getTable(self, id):
+        data = Category.objects.filter(master_id=id).values()
+        print(data)
+        return data
