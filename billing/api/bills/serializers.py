@@ -1,7 +1,7 @@
 from collections import ChainMap
 from rest_framework import serializers
 from rest_framework.decorators import authentication_classes, permission_classes  # is
-from .models import Bill_banks, Bill_Account_type,Bill_Cash,Places,Group,Category
+from .models import Bill_banks, Bill_Account_type,Bill_Cash,Places,Group,Category,Customer
 from api.user.models import NewUSER
 from api.models import StateCodes
 class GetBankTable(serializers.ModelSerializer):
@@ -147,7 +147,14 @@ class AddPlace(serializers.ModelSerializer):
         res = Places(master_id=self.validated_data["master_id"],place_name=self.validated_data["place_name"])
         res.save()
         return "Place Added "
-    
+class GetPlace(serializers.ModelSerializer):
+    class Meta:
+        model = Places
+        fields = ["id"]
+
+    def getPlace(self,id):
+        res = Places.objects.filter(master_id = id).values()
+        return res
 class AddGroup(serializers.ModelSerializer):
     class Meta:
         model = Group
@@ -189,6 +196,7 @@ class GetGroupTable(serializers.ModelSerializer):
         return data
     
 class GetCategoryTable(serializers.ModelSerializer):
+
     class Meta:
         model = Category
         fields = ["id"]
@@ -197,3 +205,9 @@ class GetCategoryTable(serializers.ModelSerializer):
         data = Category.objects.filter(master_id=id).values()
         print(data)
         return data
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ["master_id","Image"]
+    #parser_classes = [MultiPartParser,]

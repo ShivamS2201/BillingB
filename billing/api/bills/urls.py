@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType
 
 router = routers.DefaultRouter()
 
@@ -16,12 +16,15 @@ urlpatterns = [
     path("bank/HO/editcash/<int:id>",Update_Cash.as_view()), # passes bank id from table
     path("bank/HO/addplace/",HOAddPlace.as_view()),
     path("bank/HO/fetchplace/<int:id>",getPlaceTable.as_view()), # passes bank id from table
+    path("bank/HO/getplaces/<int:id>",Placebymaster.as_view()), # passes bank id from table,
     path("bank/HO/fetchGroup/<int:id>",getGroupTable.as_view()), # passes bank id from table
     path("bank/HO/fetchcategory/<int:id>",getCatTable.as_view()), # passes bank id from table
     path("bank/HO/addgroup/",HOAddGroup.as_view()),
     path("bank/HO/addcategory/",HOAddCategory.as_view()),
     path("bank/HO/addbank/stateCodes/",StateCodesBank.as_view()),
+    path("bank/HO/customer/RegisterDealer/",RegisterDealerType.as_view()),
     path("bank/HO/addbank/acctype/",Accountype.as_view()),
+    path("bank/HO/AddCustomer/",CustomerView.as_view()),
     
 ]
 

@@ -35,8 +35,8 @@ class NewUSER(AbstractBaseUser,PermissionsMixin):
         DISTRIBUTOR = '3','Distributor'
         SALES = '4','Sales'
         HEAD_OFFICE ='5','Head Office'
-        CUSTOMER = '6','Customer'
-        USER = '7', 'User'
+        CUSTOMER = '6','Branch'
+        USER = '7', 'Customer'
     email = models.EmailField(('Email Address'),unique=True)
     user_name = models.CharField(max_length=150,unique=True)
     first_name = models.CharField(max_length=150,blank=True)
@@ -76,7 +76,7 @@ class Bill_manage_info(models.Model):
     pan_card = models.CharField(max_length=16)
     is_regdealer = models.BooleanField(_("Is regular Dealer"))
     stateCode = models.ForeignKey("api.StateCodes",verbose_name=_("State Code"),on_delete=models.CASCADE) #FK
-    gstNum = models.CharField(max_length=14)
+    gstNum = models.CharField(max_length=15)
     reg_dealer_type = models.IntegerField() # FK
     pin_code = models.IntegerField(max_length=5)
     status_type = models.IntegerField(max_length=2)

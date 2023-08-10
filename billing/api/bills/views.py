@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace
 from rest_framework.response import Response
-from api.serializers import GetStateCodes
+from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
 from rest_framework import status
 from .models import Bill_Cash,Bill_banks
 # Create your views here.
+from rest_framework.parsers import MultiPartParser,FormParser
 class getBankTable(APIView):
     def get(self,request,id):
         serializer = GetBankTable(data = request.data)
@@ -79,6 +80,12 @@ class StateCodesBank(APIView):
             res = serializer.getState()
             return Response(res)
 
+class RegisterDealerType(APIView):
+    def get(self,request):
+        serializer = Getdealertype(data=request.data)
+        if serializer.is_valid():
+            res = serializer.getDealer()
+            return Response(res)
 class Accountype(APIView):
     def get(self,request):
         serializer = GetAccounttype(data=request.data)
@@ -86,6 +93,12 @@ class Accountype(APIView):
             res = serializer.AccType()
             return Response(res)
 
+class Placebymaster(APIView):
+    def get(self,request,id):
+        serializer = GetPlace(data=request.data)
+        if serializer.is_valid():
+            res = serializer.getPlace(id)
+            return Response(res)
 class HOAddPlace(APIView):
     def post(self,request):
         serializer = AddPlace(data=request.data)
@@ -125,3 +138,14 @@ class getCatTable(APIView):
         if serializer.is_valid():
             TableData = serializer.getTable(id)
             return Response(TableData)
+        
+class CustomerView(APIView):
+    parser_classes = [MultiPartParser,FormParser]
+
+    def post(self,request,format=None):
+        serializer = CustomerSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save() # Automatic Function to add the customer instance to DB 
+            return Response("Customer Added",status= status.HTTP_200_OK)
+        else:
+            return Response("Customer Not Added",status= status.HTTP_400_BAD_REQUEST)
