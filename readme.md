@@ -84,4 +84,9 @@ DB2: Billing New Database- (17/06/23)
 - Add cash to database aneed to add all the variants of other masters by tomorrow. 
 Change the error and success message, and put it up to every master<br>
 - Create forms and serialzers for masters and see the GST number issue too.
-
+<br>
+To be added<br>
+- Customer Add connection 
+- Limit data connection and Button to their adds 
+- Email, System and Whatsap connection
+- Change of headoffice and Branch once made.
