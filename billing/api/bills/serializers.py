@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.decorators import authentication_classes, permission_classes  # is
 from .models import Bill_banks, Bill_Account_type,Bill_Cash,Places,Group,Category,Customer
 from api.user.models import NewUSER
-from api.models import StateCodes
+from api.models import StateCodes,Currency,Export
 class GetBankTable(serializers.ModelSerializer):
     class Meta:
         model = Bill_banks
@@ -211,3 +211,21 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ["master_id","Image"]
     #parser_classes = [MultiPartParser,]
+
+class getCurrency(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ["id"]
+
+    def FetchCurrency(self):
+        res = Currency.objects.filter().values()
+        return res
+    
+class getExport(serializers.ModelSerializer):
+    class Meta:
+        model = Export
+        fields = ["id"]
+
+    def FetchExport(self):
+        res = Export.objects.filter().values()
+        return res

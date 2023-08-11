@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -149,3 +149,21 @@ class CustomerView(APIView):
             return Response("Customer Added",status= status.HTTP_200_OK)
         else:
             return Response("Customer Not Added",status= status.HTTP_400_BAD_REQUEST)
+        
+class CurrencyFetch(APIView):
+    def get(self,request):
+        serializer = getCurrency(data = request.data)
+        if serializer.is_valid():
+            res = serializer.FetchCurrency()
+            return Response(res,status=status.HTTP_200_OK)
+        else:
+            return Response("Error in Currency",status=status.HTTP_400_BAD_REQUEST)
+        
+class ExportFetch(APIView):
+    def get(self,request):
+        serializer = getExport(data = request.data)
+        if serializer.is_valid():
+            res = serializer.FetchExport()
+            return Response(res,status=status.HTTP_200_OK)
+        else:
+            return Response("Error in Export",status=status.HTTP_400_BAD_REQUEST)

@@ -92,5 +92,15 @@ class Customer(models.Model):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.cust_name}"
+        return f"{self.id}"
 
+
+class CustomerLimit(models.Model):
+    is_limit = models.BooleanField(default=True)
+    amount = models.IntegerField(max_length=10,default=0)
+    cust_openingBalance = models.IntegerField(max_length=10,default=0)
+    user_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    sales_type = models.CharField(max_length=15)
+    rcm = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    cust_id = models.ForeignKey("Customer",on_delete=models.CASCADE)
