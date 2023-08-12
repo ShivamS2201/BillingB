@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -145,8 +145,8 @@ class CustomerView(APIView):
     def post(self,request,format=None):
         serializer = CustomerSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.save() # Automatic Function to add the customer instance to DB 
-            return Response("Customer Added",status= status.HTTP_200_OK)
+            res = serializer.save() # Automatic Function to add the customer instance to DB 
+            return Response(res,status= status.HTTP_200_OK)
         else:
             return Response("Customer Not Added",status= status.HTTP_400_BAD_REQUEST)
         
@@ -167,3 +167,13 @@ class ExportFetch(APIView):
             return Response(res,status=status.HTTP_200_OK)
         else:
             return Response("Error in Export",status=status.HTTP_400_BAD_REQUEST)
+        
+class CustomerLimitView(APIView):
+    parser_classes = [MultiPartParser,FormParser]
+    def post(self,request):
+        serializer = AddLimit(data=request.data)
+        if serializer.is_valid():
+            res = serializer.save()
+            return Response({"res":res},status=status.HTTP_200_OK)
+        else:
+            return Response("Limit Not Added",status= status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView
 
 router = routers.DefaultRouter()
 
@@ -27,6 +27,7 @@ urlpatterns = [
     path("bank/HO/customer/RegisterDealer/",RegisterDealerType.as_view()),
     path("bank/HO/addbank/acctype/",Accountype.as_view()),
     path("bank/HO/AddCustomer/",CustomerView.as_view()),
+    path("bank/HO/AddCustomerLimit/",CustomerLimitView.as_view()),
     
 ]
 
