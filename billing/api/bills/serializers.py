@@ -327,7 +327,7 @@ class AddLimit(serializers.ModelSerializer):
     class Meta:
         model = CustomerLimit
         fields = [
-            "is_limit",
+            "is_limit_cond",
             "amount",
             "cust_openingBalance",
             "user_id",
@@ -336,15 +336,34 @@ class AddLimit(serializers.ModelSerializer):
             "cust_id",
         ]
 
-    def save(self):
-        res = AddLimit(
-            is_limit=self.validated_data["is_limit"],
-            amount=self.validated_data["amount"],
-            cust_openingBalance=self.validated_data["cust_openingBalance"],
-            user_id=self.validated_data["user_id"],
-            sales_type=self.validated_data["sales_type"],
-            rcm=self.validated_data["rcm"],
-            cust_id=self.validated_data["cust_id"],
-        )
-        res.save()
-        return "Limit added"
+    # def save(self):
+    #     res = AddLimit(
+    #         is_limit_cond=self.validated_data["is_limit_cond"],
+    #         amount=self.validated_data["amount"],
+    #         cust_openingBalance=self.validated_data["cust_openingBalance"],
+    #         user_id=self.validated_data["user_id"],
+    #         sales_type=self.validated_data["sales_type"],
+    #         rcm=self.validated_data["rcm"],
+    #         cust_id=self.validated_data["cust_id"],
+    #     )
+    #     res.save()
+    #     return "Limit added"
+
+class GetCustomerCount(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ["id"]
+
+    def get(self, id):
+        # returns user created bank count.
+        res = Customer.objects.filter(master_id=id).values()
+        return res.count()
+    
+class GetCustTable(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ["id"]
+
+    def getTable(self, id):
+        data = Customer.objects.filter(master_id=id).values()
+        return data

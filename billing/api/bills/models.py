@@ -96,7 +96,7 @@ class Customer(models.Model):
 
 
 class CustomerLimit(models.Model):
-    is_limit = models.BooleanField(default=True)
+    is_limit_cond = models.BooleanField(default=True)
     amount = models.IntegerField(max_length=10,default=0)
     cust_openingBalance = models.IntegerField(max_length=10,default=0)
     user_id = models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)

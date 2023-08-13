@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -173,7 +173,21 @@ class CustomerLimitView(APIView):
     def post(self,request):
         serializer = AddLimit(data=request.data)
         if serializer.is_valid():
-            res = serializer.save()
-            return Response({"res":res},status=status.HTTP_200_OK)
+            serializer.save()
+            return Response("Limit Added",status=status.HTTP_200_OK)
         else:
             return Response("Limit Not Added",status= status.HTTP_400_BAD_REQUEST)
+
+class CustCntview(APIView):
+    def get(self,request,id):
+        serializer = GetCustomerCount(data = request.data)
+        if serializer.is_valid():
+            re = serializer.get(id)
+            return Response(re)
+        
+class getCustTable(APIView):
+     def get(self,request,id):
+        serializer = GetCustTable(data = request.data)
+        if serializer.is_valid():
+            TableData = serializer.getTable(id)
+            return Response({"response":TableData},status=status.HTTP_200_OK)
