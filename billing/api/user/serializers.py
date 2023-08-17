@@ -383,13 +383,22 @@ class GetByOwner(serializers.ModelSerializer): # returns all counts of all prese
 class GetDistributorByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
+        fields = ["id"]
 
     def getTable(self,id,role):
         data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","joining_date","first_name","email","is_active","role_id","bill_manage_info__landlineNUM","bill_manage_info__id","bill_manage_info__system_credit","bill_manage_info__system_debit","bill_manage_info__sms_credit","bill_manage_info__sms_debit","bill_manage_info__whatsapp_credit","bill_manage_info__whatsapp_debit","renew_year","bill_manage_info__reason","bill_manage_info__kyc","bill_manage_info__gstNum","bill_manage_info__pan_card","bill_manage_info__stateCode","bill_manage_info__is_regdealer","bill_manage_info__actual_billQty","bill_manage_info__edit_status","bill_manage_info__reg_dealer_type","bill_manage_info__pin_code","bill_manage_info__status_type","bill_manage_info__cin_number","bill_manage_info__shortname")
         return data
+    
+    def getDistDropdown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active")
+        for ele in data:
+            resp.append({"value":ele["id"],"label":ele["first_name"]})
+        return resp
 class GetSalesByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
+        fields = ["id"]
 
     def getTable(self,id,role):
         resp = []
@@ -399,6 +408,13 @@ class GetSalesByOwner(serializers.ModelSerializer):
             ele = ChainMap({"first_name_dist":dist[0]["first_name"]}, ele)
             resp.append(ele)
         return resp
+    def getSalesDropdown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active","distID")
+        for ele in data:
+            resp.append({"value":ele["id"],"label":ele["first_name"],"dist_id":ele["distID"]})
+        return resp
+        
 class GetHOByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info

@@ -261,7 +261,23 @@ class GetDistributorTableByOwner(APIView):
         HOdata = serializer.getTable(id, role)
         return Response(HOdata, status=status.HTTP_200_OK)
 
+class DistDropdown(APIView):
+    def get(self,request,id,role):
+        serializer = GetDistributorByOwner(data=request.data)
+        if serializer.is_valid():
+            HOdata = serializer.getDistDropdown(id, role)
+            return Response(HOdata, status=status.HTTP_200_OK)
+        else:
+            return Response("No data", status=status.HTTP_400_BAD_REQUEST)
 
+class SalesDropdown(APIView):
+    def get(self,request,id,role):
+        serializer = GetSalesByOwner(data=request.data)
+        if serializer.is_valid():
+            HOdata = serializer.getSalesDropdown(id, role)
+            return Response(HOdata, status=status.HTTP_200_OK)
+        else:
+            return Response("No data", status=status.HTTP_400_BAD_REQUEST)
 class GetHOTablebyOwner(APIView):
     def get(self, request, id, role):
         serializer = GetHOByOwner(data=request.data)

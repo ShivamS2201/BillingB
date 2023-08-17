@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetBySalesview,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData,GetSalesByDview,GetHobyDview,GetBrbyDview,GetHObysalesview,GetBrbysalesview,GetBrbyHOview
+from .views import GetUserForms,GetMsgInfo, GetUserViewSet,GetBydistributorview, RegistrationView,MSGInfoView,GetBySalesview,GetByOwnerview,GetSalesTablebyOwner,GetBrTablebyOwner,GetHOTablebyOwner,GetDistributorTableByOwner,UpdateViewSet,UpdateMsgData,GetSalesByDview,GetHobyDview,GetBrbyDview,GetHObysalesview,GetBrbysalesview,GetBrbyHOview,DistDropdown,SalesDropdown
 router = routers.DefaultRouter()
 router.register(r'', views.UserViewSet)
 urlpatterns = [
@@ -13,6 +13,8 @@ urlpatterns = [
     path("register/user/Getbysales/<int:id>/<int:role>",GetBySalesview.as_view(),name="Numofusersales"),#Get all nums from SALES POV
     path("login/", views.signin, name="signin"),
     path("register/ownerdistributordata/<int:id>/<int:role>",GetDistributorTableByOwner.as_view()),
+    path("register/distdropdown/<int:id>/<int:role>",DistDropdown.as_view()),#id is sales id
+    path("register/salesdropdown/<int:id>/<int:role>",SalesDropdown.as_view()),
     path("register/ownersalesdata/<int:id>/<int:role>",GetSalesTablebyOwner.as_view()),
     path("register/ownerBrdata/<int:id>/<int:role>",GetBrTablebyOwner.as_view()),
     path("register/ownerHOdata/<int:id>/<int:role>",GetHOTablebyOwner.as_view()),
