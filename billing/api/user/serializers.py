@@ -24,8 +24,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         for attr, val in validated_data.items():
             if attr == "password":  # for password updation we creat this.
                 self.instance.set_password(val)
-            elif attr == "system_debit":  # for password updation we creat this.
-                self.instance.set_password(val)
+            # elif attr == "system_debit":  # for password updation we creat this.
+            #     self.instance.set_password(val)
             else:
                 setattr(self.instance, attr, val)
 
@@ -410,14 +410,22 @@ class GetSalesByOwner(serializers.ModelSerializer):
         return resp
     def getSalesDropdown(self,id,role):
         resp = []
-        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active","distID")
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active","distID","email","role_id")
         for ele in data:
-            resp.append({"value":ele["id"],"label":ele["first_name"],"dist_id":ele["distID"]})
+            dd = NewUSER.object.filter(id= ele["distID"]).values("first_name")
+            print(dd)
+            resp.append({"value":ele["id"],"label":ele["first_name"],"dist_id":ele["distID"],"distributor":dd[0],"email":ele["email"],"role_id":ele["role_id"]})
         return resp
-        
+    def getSalesHODropdown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active")
+        for ele in data:
+            resp.append({"value":ele["id"],"label":ele["first_name"]})
+        return resp
 class GetHOByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
+        fields = ["id"]
 
     def getTable(self,id,role):
         resp = []
@@ -427,6 +435,15 @@ class GetHOByOwner(serializers.ModelSerializer):
             sales = NewUSER.object.filter(id = ele["salesid"]).values("first_name")
             ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"]}, ele)
             resp.append(ele)
+        return resp
+    
+    def getHODropdown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active","salesid","email","role_id")
+        for ele in data:
+            dd = NewUSER.object.filter(id= ele["salesid"]).values("first_name")
+            print(dd)
+            resp.append({"value":ele["id"],"label":ele["first_name"],"salesid":ele["salesid"],"distributor":dd[0],"email":ele["email"],"role_id":ele["role_id"]})
         return resp
 class GetBrByOwner(serializers.ModelSerializer):
     class Meta:

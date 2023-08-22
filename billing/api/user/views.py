@@ -39,7 +39,7 @@ from .serializers import (
     MSGSerializer,
     SalesRegistrationSerializer,
     UserSerializer,
-    GetBrbyHO
+    GetBrbyHO,
 )
 
 
@@ -278,6 +278,25 @@ class SalesDropdown(APIView):
             return Response(HOdata, status=status.HTTP_200_OK)
         else:
             return Response("No data", status=status.HTTP_400_BAD_REQUEST)
+
+class SalesHOdropdown(APIView):
+    def get(self,request,id,role):
+        serializer = GetSalesByOwner(data=request.data)
+        if serializer.is_valid():
+            salesData = serializer.getSalesHODropdown(id, role)
+            return Response(salesData, status=status.HTTP_200_OK)
+        else:
+            return Response("No data", status=status.HTTP_400_BAD_REQUEST)
+
+class HODropdown(APIView):
+    def get(self,request,id,role):
+        serializer = GetHOByOwner(data=request.data)
+        if serializer.is_valid():
+            HOdata = serializer.getHODropdown(id, role)
+            return Response(HOdata, status=status.HTTP_200_OK)
+        else:
+            return Response("No data", status=status.HTTP_400_BAD_REQUEST)
+        
 class GetHOTablebyOwner(APIView):
     def get(self, request, id, role):
         serializer = GetHOByOwner(data=request.data)

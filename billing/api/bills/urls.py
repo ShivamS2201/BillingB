@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable
 
 router = routers.DefaultRouter()
 
@@ -30,11 +30,8 @@ urlpatterns = [
     path("bank/HO/AddCustomerLimit/",CustomerLimitView.as_view()),
     path("bank/HO/getCustcnt/<int:id>",CustCntview.as_view()),# passes userid
     path("bank/HO/fetchCusttable/<int:id>",getCustTable.as_view()), # passes bank id from table
-
-
-    
+    path("admin/fetchMsgTable",GetMsgTable.as_view()), # passes bank id from table
 ]
-
 # paths to masters of all services \: 
 # - Add,Edit and fetch foir count and table formations.
 # Add just simply puts them trough just need to have the pass as per id becuase as the masters add data they will be fetched all in one thus I need to pass it as per Specific user id .

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -191,3 +191,10 @@ class getCustTable(APIView):
         if serializer.is_valid():
             TableData = serializer.getTable(id)
             return Response({"response":TableData},status=status.HTTP_200_OK)
+        
+class GetMsgTable(APIView):
+    def get(self,request):
+        serializer = GetMessageTable(data = request.data)
+        if serializer.is_valid():
+            Table = serializer.getTable()
+            return Response(Table,status=status.HTTP_200_OK)

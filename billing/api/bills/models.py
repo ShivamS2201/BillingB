@@ -104,3 +104,11 @@ class CustomerLimit(models.Model):
     rcm = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     cust_id = models.ForeignKey("Customer",on_delete=models.CASCADE)
+
+class Bill_messages(models.Model):
+    message = models.CharField(_("Message"), max_length=500,null=False)
+    ShortId = models.CharField(_("Unique Identifier"), max_length=100) # Like Diwali 22.
+    timestamp = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return f"{self.ShortId}"

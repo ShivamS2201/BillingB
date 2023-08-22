@@ -10,6 +10,7 @@ from .models import (
     Category,
     Customer,
     CustomerLimit,
+    Bill_messages
 )
 from api.user.models import NewUSER
 from api.models import StateCodes, Currency, Export
@@ -366,4 +367,14 @@ class GetCustTable(serializers.ModelSerializer):
 
     def getTable(self, id):
         data = Customer.objects.filter(master_id=id).values()
+        return data
+    
+class GetMessageTable(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_messages
+        fields = ["id"]
+
+    def getTable(self):
+        data = Bill_messages.objects.filter().values()
+        print(data)
         return data
