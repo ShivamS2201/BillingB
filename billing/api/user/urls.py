@@ -25,7 +25,9 @@ from .views import (
     DistDropdown,
     SalesDropdown,
     SalesHOdropdown,
-    HODropdown
+    HODropdown,
+    MSGHODropdown,
+    MSGBRdropdown
 )
 
 router = routers.DefaultRouter()
@@ -66,6 +68,8 @@ urlpatterns = [
     path("register/salesdropdown/<int:id>/<int:role>", SalesDropdown.as_view()),
     path("register/salesHOdropdown/<int:id>/<int:role>", SalesHOdropdown.as_view()),
     path("register/HOdropdown/<int:id>/<int:role>", HODropdown.as_view()),
+    path("register/msgHOdropdown/<int:id>/<int:role>", MSGHODropdown.as_view()),
+    path("register/msgbrdropdown/<int:id>/<int:role>", MSGBRdropdown.as_view()),
     path("register/ownersalesdata/<int:id>/<int:role>", GetSalesTablebyOwner.as_view()),
     path("register/ownerBrdata/<int:id>/<int:role>", GetBrTablebyOwner.as_view()),
     path("register/ownerHOdata/<int:id>/<int:role>", GetHOTablebyOwner.as_view()),

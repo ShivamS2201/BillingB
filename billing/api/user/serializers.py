@@ -445,9 +445,17 @@ class GetHOByOwner(serializers.ModelSerializer):
             print(dd)
             resp.append({"value":ele["id"],"label":ele["first_name"],"salesid":ele["salesid"],"distributor":dd[0],"email":ele["email"],"role_id":ele["role_id"]})
         return resp
+    
+    def MsgHODropDown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active")
+        for ele in data:
+            resp.append({"value":ele["id"],"label":ele["first_name"]})
+        return resp
 class GetBrByOwner(serializers.ModelSerializer):
     class Meta:
         model = Bill_manage_info
+        fields  = ["id"]
 
     def getTable(self,id,role):
         resp=[]
@@ -459,6 +467,13 @@ class GetBrByOwner(serializers.ModelSerializer):
             ele = ChainMap({"first_name_dist":dist[0]["first_name"],"first_name_sales":sales[0]["first_name"],"first_name_HO":hdid[0]["first_name"]}, ele)
             resp.append(ele)
 
+        return resp
+    
+    def MsgBRDropDown(self,id,role):
+        resp = []
+        data = NewUSER.object.filter(owner_id = id,role_id =role).values("id","first_name","is_active")
+        for ele in data:
+            resp.append({"value":ele["id"],"label":ele["first_name"]})
         return resp
 
 # from distributor---------------------------------------
