@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService
 
 router = routers.DefaultRouter()
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path("bank/HO/getCustcnt/<int:id>",CustCntview.as_view()),# passes userid
     path("bank/HO/fetchCusttable/<int:id>",getCustTable.as_view()), # passes bank id from table
     path("admin/fetchMsgTable",GetMsgTable.as_view()), # passes bank id from table
+    path("admin/sendmessage",MessageService.as_view()), # passes bank id from table    
 ]
 # paths to masters of all services \: 
 # - Add,Edit and fetch foir count and table formations.

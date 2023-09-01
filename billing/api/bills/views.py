@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
 from rest_framework import status
 from .models import Bill_Cash,Bill_banks
+from .sendSMS import send_SMS
 # Create your views here.
 from rest_framework.parsers import MultiPartParser,FormParser
 class getBankTable(APIView):
@@ -198,3 +199,12 @@ class GetMsgTable(APIView):
         if serializer.is_valid():
             Table = serializer.getTable()
             return Response(Table,status=status.HTTP_200_OK)
+        
+class MessageService(APIView):
+    def post(self,request):
+        serializer = AddMessage(data=request.data)
+        send_SMS(request.data)
+        if serializer.is_valid():
+            resp = serializer.MessageAdd()
+            # Send Message Code here.
+            return Response(resp,status=status.HTTP_200_OK)

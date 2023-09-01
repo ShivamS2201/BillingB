@@ -378,3 +378,18 @@ class GetMessageTable(serializers.ModelSerializer):
         data = Bill_messages.objects.filter().values()
         print(data)
         return data
+    
+class AddMessage(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_messages
+        fields = ["id",
+                  "message",
+                  "ShortId",
+                  ]
+    def MessageAdd(self):
+        MSG = Bill_messages(
+            message = self.validated_data["message"],
+            ShortId = self.validated_data["ShortId"])
+        MSG.save()
+        return "ok"
+
