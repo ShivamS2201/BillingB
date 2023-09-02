@@ -6,7 +6,7 @@ from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
 from rest_framework import status
 from .models import Bill_Cash,Bill_banks
-from .sendSMS import send_SMS
+from .sendSMS import send_SMS,send_Whatsapp
 # Create your views here.
 from rest_framework.parsers import MultiPartParser,FormParser
 class getBankTable(APIView):
@@ -208,3 +208,12 @@ class MessageService(APIView):
             resp = serializer.MessageAdd()
             # Send Message Code here.
             return Response(resp,status=status.HTTP_200_OK)
+        
+class WhatsappMessageService(APIView):
+    def post(self,request):
+        # serializer = AddMessage(data=request.data)
+        send_Whatsapp(request.data)
+        # if serializer.is_valid():
+            # resp = serializer.MessageAdd()
+            # Send Message Code here.
+        return Response("ok",status=status.HTTP_200_OK)
