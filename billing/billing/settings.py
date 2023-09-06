@@ -139,3 +139,8 @@ SMS_NUMBER = +12569702689
 ACCOUNT_SID_SMS = 'AC1b877111a2ce88b666843a7f3763c7ff'
 AUTH_TOKEN_SMS = 'a81bbfaee7136a6b42d12e417990d49f'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "shivams2201work@gmail.com"

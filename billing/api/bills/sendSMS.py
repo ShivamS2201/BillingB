@@ -1,5 +1,6 @@
 from twilio.rest import Client
 from django.conf import settings
+from django.core.mail import send_mail
 from api.user.models import Bill_manage_info
 client = Client(settings.ACCOUNT_SID_SMS, settings.AUTH_TOKEN_SMS)
 def send_SMS(msg_body):
@@ -43,3 +44,12 @@ def send_Whatsapp(msg_body):
         for ids in msg_body["Br"].split(","):
             ob = Bill_manage_info.objects.get(pk=int(ids))
             message = client.messages.create(from_='whatsapp:{numb}'.format(numb=settings.WHATSAPP_NUMBER),body="Dear Branch \n" + msg_body["message"],to='whatsapp:+91{num}'.format(num=ob.landlineNUM))
+
+def send_Email(msg_body):
+    #sub = msg_body[""]
+    #message
+    from_mail = settings.EMAIL_HOST_USER
+    send_mail(msg_body["ShortId"],msg_body["message"],from_mail,["shivamsharmau60@gmail.com"])# sends the email
+    print("Mail",msg_body)
+
+    pass
