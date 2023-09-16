@@ -10,7 +10,8 @@ from .models import (
     Category,
     Customer,
     CustomerLimit,
-    Bill_messages
+    Bill_messages,
+    InvoiceTemplate
 )
 from api.user.models import NewUSER
 from api.models import StateCodes, Currency, Export
@@ -393,3 +394,10 @@ class AddMessage(serializers.ModelSerializer):
         MSG.save()
         return "ok"
 
+class GetTemplates(serializers.ModelSerializer):
+    class Meta:
+        model = InvoiceTemplate
+        fields = ["id"]
+    def getTemplates(self):
+        data = InvoiceTemplate.objects.filter().values()
+        return data

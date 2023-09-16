@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -226,3 +226,12 @@ class EmailMessageService(APIView):
             # resp = serializer.MessageAdd()
             # Send Message Code here.
         return Response("ok",status=status.HTTP_200_OK)
+    
+class GetTemplatesList(APIView):
+    def get(self,request):
+        serializer = GetTemplates(data = request.data)
+        if serializer.is_valid():
+            Table = serializer.getTemplates()
+            return Response(Table,status=status.HTTP_200_OK)
+        else:
+            return Response("Unable To fetch",status=status.HTTP_200_OK)

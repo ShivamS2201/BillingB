@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 def upload_to(instance,filename):
     return 'Customer/{filename}'.format(filename=filename)
+def upload_to_invoice(instance,filename):
+    return 'Invoice/{filename}'.format(filename=filename)
 # Create your models here.
 class Bill_Account_type(models.Model):
     account_type_name = models.CharField(max_length=20)
@@ -112,3 +114,42 @@ class Bill_messages(models.Model):
 
     def __str__(self):
         return f"{self.ShortId}"
+
+class InvoiceTemplate(models.Model):
+    temp_name = models.CharField(_("Template Name"), max_length=50)
+    temp_path = models.CharField(_("Template Path"),max_length=50)
+    date_time = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+    
+    def __str__(self) -> str:
+        return self.temp_name
+
+class Bill_invoce(models.Model):	
+    user_id =  models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    is_logo_img = models.BooleanField(_("Print Option"), max_length=500,null=False)
+    logo = models.ImageField(_("Image"),upload_to=upload_to_invoice,default='invoice/inv_logo.jpg')
+    logo_text	= models.CharField(_("Logo Text"), max_length=3,null=False)
+    invoice_design_temp	=models.ForeignKey("InvoiceTemplate",verbose_name=_("Invoice Template"),on_delete=models.CASCADE)
+    currency = models.ForeignKey("api.Currency",verbose_name=_("Currency"),on_delete=models.CASCADE)
+    term_condition	= models.CharField(_("T&C"), max_length=500,null=False)
+    additional_option_type	= models.BooleanField(_("Add_Options"),null=False)
+    option_values= models.CharField(_("option Values"), max_length=50,null=False)
+    ecommerce_trader	= models.BooleanField(_("ecommerce_trader"),null=False)
+    reverse_charge	= models.BooleanField(_("reverse_charge"),null=False)
+    to_bill_ship_applicable	= models.BooleanField(_("bill_ship_applicable"),null=False)
+    gst_shipping_address	= models.BooleanField(_("gst_shipping_address"),null=False)
+    from_date	= models.CharField(_("from Date"), max_length=100,null=False)
+    till_date	= models.CharField(_("to Date"), max_length=100,null=False)
+    date_time= models.DateTimeField(auto_now_add=True) 
+
+class Bill_Series(models.Model):
+    user_id =  models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
+    invoice_id	=  models.ForeignKey("Bill_invoce",on_delete=models.CASCADE)	
+    series_num	 = models.IntegerField(_("Series Num"))
+    name = models.CharField(_("Name"), max_length=50)
+    prefix_surfix_type	 = models.BooleanField(_("Prefix_Sufix"),default=True)
+    sl_num	= models.CharField(_("serial num"), max_length=10)
+    prefix_surfix = models.CharField(_("Ufix"), max_length=6)
+    primary_type = models.BooleanField(_("Primary Type")) 
+    genrate_invoice = models.BooleanField(_("Generate Invoice"),default=False) 
+    date_time= models.DateTimeField(auto_now_add=True) 
