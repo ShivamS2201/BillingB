@@ -24,7 +24,7 @@ class Bill_banks(models.Model):
     ifsc_code = models.CharField(max_length=20)
     Branch = models.CharField(max_length=20)
     StateCode = models.ForeignKey("api.StateCodes",verbose_name=_("State Code"),on_delete=models.CASCADE)
-    gstNumber = models.CharField(max_length=15)#models.ForeignKey("user.Bill_manage_info",on_delete=models.CASCADE)
+    gstNumber = models.CharField(max_length=15,null=True)#models.ForeignKey("user.Bill_manage_info",on_delete=models.CASCADE)
     account_type = models.ForeignKey(Bill_Account_type,on_delete=models.CASCADE) 
     open_balance = models.CharField(max_length=10)
     Primary_type = models.BooleanField(default=True)
