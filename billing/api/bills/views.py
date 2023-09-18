@@ -15,6 +15,12 @@ class getBankTable(APIView):
         if serializer.is_valid():
             TableData = serializer.getTable(id)
             return Response(TableData)
+class BankSelect(APIView):
+    def get(self,request,id):
+        serializer = GetBanks(data = request.data)
+        if serializer.is_valid():
+            TableData = serializer.getBankSelect(id)
+            return Response(TableData)
 class hoAddBank(APIView):
     def post(seld,request,id):
         serializer = AddBanks(data = request.data)

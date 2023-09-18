@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect
 
 router = routers.DefaultRouter()
 
@@ -34,7 +34,8 @@ urlpatterns = [
     path("admin/sendmessage",MessageService.as_view()), # passes bank id from table    
     path("admin/sendmessageW",WhatsappMessageService.as_view()), # passes bank id from table    
     path("admin/sendmessageE",EmailMessageService.as_view()), # passes bank id from table    
-    path("HO/fetchtemplates",GetTemplatesList.as_view()), # passes bank id from table    
+    path("HO/fetchtemplates",GetTemplatesList.as_view()), # passes bank id from table 
+    path("bank/selectbank/<int:id>",BankSelect.as_view()),   
     # path("admin/sendmessageMOS",MessageService.as_view()), # passes bank id from table    
     
 ]

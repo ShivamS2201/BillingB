@@ -41,7 +41,6 @@ class GetBanks(serializers.ModelSerializer):
 
     def bankdetail(self, id):
         res = Bill_banks.objects.filter(id=id).values()  # returns bank with the id.
-        print(res)
         # ress = Bill_banks.objects.filter(id=id).values("StateCode","account_type") # returns bank with the id.
         # print("ress",ress)
         # stateCode = StateCodes.objects.filter(state_code = ress[0]['StateCode']).values("id","state_code","state_name")
@@ -50,6 +49,12 @@ class GetBanks(serializers.ModelSerializer):
         # print(Accounttype)
         # res = ChainMap({"account_type":Accounttype[0]["account_type_name"],"StateCode":stateCode[0]["state_name"]}, res)
         return res
+    def getBankSelect(self,id):
+        resp = []
+        res = Bill_banks.objects.filter(user_id=id).values("id","bank_name","ifsc_code")
+        for ele in res:
+            resp.append({"value":ele["id"],"label":ele["bank_name"]+" "+ele["ifsc_code"]})
+        return resp
 
 
 class AddBanks(serializers.ModelSerializer):
