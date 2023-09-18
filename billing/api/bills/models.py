@@ -141,7 +141,7 @@ class Bill_invoce(models.Model):
     from_date = models.CharField(_("from Date"), max_length=100,null=False)
     till_date = models.CharField(_("to Date"), max_length=100,null=False)
     date_time = models.DateTimeField(auto_now_add=True) 
-    bank_def = models.ForeignKey("Bill_banks",verbose_name=_("Bank"),on_delete=models.CASCADE)
+    bank_def = models.ForeignKey("Bill_banks",verbose_name=_("Bank"),on_delete=models.CASCADE,null=True)
 
 class Bill_Series(models.Model):
     user_id =  models.ForeignKey("user.NewUSER",on_delete=models.CASCADE)
