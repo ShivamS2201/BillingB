@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import (
     make_password,
 )  # brings passwords in clear text format and Hashes it
 from collections import ChainMap
+from api.models import StateCodes
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop("password", None)
@@ -127,6 +128,9 @@ class MSGSerializer(serializers.ModelSerializer):
                setattr(self.instance,attr,int(val) - int(validated_data["whatsapp_debit"])) 
            elif (attr =="system_debit" or attr =="sms_debit" or attr =="whatsapp_debit"):
                setattr(self.instance,attr,val)
+           elif attr == "stateCode":
+               value = StateCodes.objects.get(pk=val)
+               setattr(self.instance,attr,value)
            else:
                setattr(self.instance,attr,val)
         self.instance.save()
