@@ -1,0 +1,54 @@
+.Profile{
+    height: 140vh;
+    width:40%;
+    border:2px solid #4a4d9a;
+}
+@keyframes lefttoright {
+    from {clip-path: inset(0 100% 0 0);}
+    to {    clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes righttoleft {
+    from {clip-path: inset(0 0 0 100%);}
+    to {    clip-path: inset(0 0 0 0);
+    }
+  }
+.Container > .row > .DealerSelection{
+    animation: lefttoright 2s ease-in-out;
+}
+.Container > .row > .DealerSelectionf{
+    animation: righttoleft 2s ease-in-out;
+
+}
+
+.Container > .row .OBDiv{
+  animation: lefttoright 200ms ease-in-out;
+}
+
+
+.Container > .row >.row > .OPBDIV{
+  animation: righttoleft 200ms ease-in-out;
+}
+.Container  .AddressContainer{
+  border: 1px solid #f1f1f1;
+  padding-bottom: 3vh ;
+
+
+}
+.RowBoxHeading{
+  font-weight: 600;
+  font-size: 14px;
+}
+.TopMargin{
+  margin-top: 4vh;
+  margin-bottom: 3vh;
+}
+.Container > .ButtonsForm{
+  justify-content: flex-end;
+  margin: 12px 0 12px 0;
+}
+.ButtonsForm > .col-1 >.btn{
+  background-color: #313493;
+  border:0;
+  padding:0 22px 0 22px;
+}

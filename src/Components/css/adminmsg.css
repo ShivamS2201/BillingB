@@ -1,0 +1,12 @@
+.MessageFlex{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.MessageFlex > button {
+    width: 100%;
+    margin: 13px;
+    background-color: rgb(47, 49, 146);
+    border:0;
+}
+

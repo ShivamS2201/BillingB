@@ -1,0 +1,40 @@
+.parentplace {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 2vh;
+  margin: 3em 0.4em 2em 5em;
+  align-items: end;
+}
+
+.divp1 {
+  grid-area: 1 / 1 / 2 / 5;
+}
+.divp2 {
+  grid-area: 1 / 5 / 2 / 6;
+}
+.divp2 > button {
+  position: relative;
+  left: 3vw;
+}
+.divp3 {
+  grid-area: 2 / 1 / 3 / 5;
+}
+.divp4 {
+  grid-area: 2 / 5 / 3 / 6;
+}
+.divp4 > button {
+  position: relative;
+  left: 3vw;
+}
+.divp5 {
+  grid-area: 3 / 1 / 4 / 5;
+}
+.divp6 {
+  grid-area: 3 / 5 / 4 / 6;
+}
+.divp6 > button {
+  position: relative;
+  left: 3vw;
+}

@@ -1,0 +1,169 @@
+.TableContainer{
+    font-size: 13px;
+    background-color: #fff;
+    border: 1px solid #f1f1f1;
+    padding-top: 10px;
+    position: relative;
+    margin-bottom: 30px;
+}
+.react-bootstrap-table{
+    overflow: hidden;
+}
+tbody,thead,tr{
+        border-style: hidden;
+}
+tbody, td, tfoot, th, thead {
+    border-color: inherit;
+    border-style: hidden;
+    border-width: 0;
+}
+.react-bootstrap-table tbody > tr{
+
+    border-top: 1px solid black;
+
+}
+
+.ButtonSearchCont{
+    padding: 0 7px;
+}
+.ButtonTextWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2vh;
+}
+.LOS{
+    background-color: #fff;
+    border-bottom: 2px solid #2f3192;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 20px 0;
+    position: relative;
+    text-transform: capitalize;
+    float: left;
+    color: #242424;
+    margin-bottom: 0;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+    line-height: 30px;
+}
+.ButtonContainerm button{
+    font-family: 'Open Sans', sans-serif;
+    background: #292c8f ;
+    color:white;
+    margin-bottom: 2px;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.ButtonContainerm button:hover{
+       color: #fff !important;
+    text-decoration: none !important;
+
+}
+#search-bar-0-label{
+display:none;
+}
+#search-bar-0{
+    height: 4.7vh;
+    width: 8vw;
+}
+.TableBarWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+/* Roe formatter
+border-top: 1px solid #ddd;
+border-bottom: 1px solid #111;
+*/
+/* Dropdown Button */
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;}
+  .DashboardBarM    {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .MasterButton {
+    position: relative;
+    font-weight: 500;
+    display: inline;
+    top: 3.9vh;
+    right: -12vw;
+  }
+  .DashboardBarM > h3 {
+    position: relative;
+    font-weight: 500;
+    display: inline;
+    left: -17vw;
+    font-size: 1.5rem;
+    top: 2.9vh;
+}
+
+.NoTableCont{
+  position: static;
+  min-height: 57vh;
+}
+.Content{
+  position: relative;
+    top: 20vh;
+    display: inline;
+    left: 30vw;
+    letter-spacing: 3px;
+    color: red;
+}

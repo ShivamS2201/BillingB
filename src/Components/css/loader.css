@@ -1,0 +1,19 @@
+.loaderWrapper{
+    position: fixed;
+    min-height: 100vh;
+    display: grid;
+    background: #fffdfd;
+    min-width: 100vw;
+    align-items: stretch;
+    z-index: 1;
+    opacity: 0.75;
+    justify-items: center;
+}
+
+.loader1{
+    top:35vh;
+    position: relative;
+}
+.loader2{
+    position: relative;
+}

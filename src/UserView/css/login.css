@@ -1,0 +1,64 @@
+.navbar_login{
+    padding-left: 60px;
+    
+}
+.LoginWrapper{
+    display: absolute;
+    text-align: center;
+
+}
+*{
+    font-family: "Source Sans Pro", sans-serif;
+}
+.BodyFooterContainer .card .card-body{
+    background-color: rgb(33 36 177);
+    color: white;
+    min-height: 75.6vh;
+}
+.BodyFooterContainer .card .card-footer{
+    color:white;
+    background-color: #ed4343;
+    text-align: center;
+}
+.FormWrapper>Form{
+    border: rgb(33 36 177) 5px solid;
+    padding: 20px;
+}
+.FormWrapper {
+    position: relative;
+    top: 5vh;
+    background-color: white;
+    width: 30vw;
+    padding: 2px;
+    border: 2px white solid;
+    color:rgb(33 36 177);
+    display: inline-block;
+}
+.TextPay{
+    color: black;
+    font-size: 12px;
+    
+}
+.TextPay .HeadTP{
+    color:rgb(33 36 177);
+    font-size: 26px;
+
+}
+.FormWrapper .mb-3{
+    text-align: left;
+    color: black;
+    font-weight: 600;
+}
+.ButtonLogin{
+    display: grid;
+}
+.ButtonLogin button{
+    background-color: rgb(33 36 177);
+    
+
+}
+.ButtonLogin .FoPass{
+    text-align: left;
+    font-size: 14px;
+}
+

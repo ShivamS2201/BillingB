@@ -1,0 +1,28 @@
+.Signnout{
+    padding-top:1vh;
+    padding-right: 4vw;
+    color:red;
+}
+.name__top{
+    background-color: black;
+    color:white;
+    padding: 6px 0px 5px 18px;
+}
+.Signnout button{
+    /* background-color: red; */
+    background: none;
+    border:1px black dotted;
+    padding: 6px;
+
+}
+
+.Signnout button:hover{
+    background: black;
+    color: white;
+    transition: all 250ms ease-in-out;
+    border:1px white dotted;
+
+    transform: scale(1.1);
+
+
+}

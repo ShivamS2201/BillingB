@@ -1,0 +1,33 @@
+.BCContainer{
+    min-height: 20vh;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.BCContainerbutt{
+    position: relative;
+    top: 9vh;
+    display: inline-block;
+    left: 6vw;
+}
+.BankContainer{
+    min-height: 60vh;
+}
+.BCContainerbutt > button{
+    padding: 12px 28px 12px 28px;
+    margin-left: 12px;
+    border:none;
+    color: #f1f1f1;
+    background-color: #f24e52;
+    font-size: 13px;
+
+}
+
+.BCContainerbutt > .BHObutt:hover{
+    background-color: #f24e52;
+
+}
+
+.tablecontainer{
+    margin: 7.2vw 4vw 0vw 4vw;
+    min-height: 41vh;
+}

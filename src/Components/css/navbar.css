@@ -1,0 +1,65 @@
+.navbar_login{
+    padding-left: 55px;    
+    justify-content: space-between;
+    border-bottom: 3px solid #b5adad;
+}
+
+#navHO{
+    flex-direction: row;
+    margin: 12px 0 0 0;
+    padding: 0;
+    font-size: 14px;
+}
+#navHO > a{
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: 600;
+    color: #2e3192;
+}
+
+#navHO > a:hover{
+    color:  #f00;
+}
+
+#navHO > .bankHOactive {
+    color:  #f00;
+}
+#navHO > .masterHOactive {
+    color:  #f00;
+}
+#navHO > .custHOactive {
+    color:  #f00;
+}
+#navHO > .stockHOactive {
+    color:  #f00;
+}
+#navHO > .receiptHOactive {
+    color:  #f00;
+}
+#navHO > .PaymentHOactive {
+    color:  #f00;
+}
+#navHO > .bankHOactive {
+    color:  #f00;
+}
+#navHO > .placeHOactive {
+    color:  #f00;
+}
+#navHO > .saleHOactive {
+    color:  #f00;
+}
+#navHO > .transportHOactive {
+    color:  #f00;
+}
+#navHO > .PurchaseHOactive {
+    color:  #f00;
+}
+#navHO > .ProudctionHOactive {
+    color:  #f00;
+}
+#navHO > .adjustmentHOactive {
+    color:  #f00;
+}
+#navHO > .CredDebHOactive {
+    color:  #f00;
+}
