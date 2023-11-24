@@ -168,7 +168,7 @@ class Bill_invoce(models.Model):
     user_id = models.ForeignKey("user.NewUSER", on_delete=models.CASCADE)
     is_logo_img = models.BooleanField(_("Print Option"), null=False)
     logo = models.ImageField(
-        _("Image"), upload_to=upload_to_invoice, default="invoice/inv_logo.jpg"
+        _("Image"), upload_to=upload_to_invoice, default="invoice/inv_logo.jpg",null=True
     )
     logo_text = models.CharField(_("Logo Text"), max_length=3, null=False)
     invoice_design_temp = models.ForeignKey(
