@@ -11,7 +11,9 @@ from .models import (
     Customer,
     CustomerLimit,
     Bill_messages,
-    InvoiceTemplate
+    InvoiceTemplate,
+    Bill_invoce,
+    Bill_Series
 )
 from api.user.models import NewUSER
 from api.models import StateCodes, Currency, Export
@@ -406,3 +408,14 @@ class GetTemplates(serializers.ModelSerializer):
     def getTemplates(self):
         data = InvoiceTemplate.objects.filter().values()
         return data
+
+class GetBillInvoice(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_invoce
+        fields = ["id"]
+    def getInvoiceDetails(self,id):
+        data = Bill_invoce.objects.filter(user_id = id).values()
+        if (data):
+            return data
+        else:
+            return 0
