@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect,BillInvoiceDetails
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect,BillInvoiceDetails,getImagePath
 
 router = routers.DefaultRouter()
 
@@ -36,7 +36,9 @@ urlpatterns = [
     path("admin/sendmessageE",EmailMessageService.as_view()), # passes bank id from table    
     path("HO/fetchtemplates",GetTemplatesList.as_view()), # passes bank id from table 
     path("bank/selectbank/<int:id>",BankSelect.as_view()),   
-    path("getInvoice/<int:id>",BillInvoiceDetails.as_view()),   
+    path("getInvoice/<int:id>",BillInvoiceDetails.as_view()),
+    path("getImg/path/<int:id>",getImagePath,name="MediaImage"),
+
     
     # path("admin/sendmessageMOS",MessageService.as_view()), # passes bank id from table    
     

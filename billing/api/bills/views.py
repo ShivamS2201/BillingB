@@ -5,10 +5,18 @@ from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
 from rest_framework import status
-from .models import Bill_Cash,Bill_banks
+from .models import Bill_Cash,Bill_banks,Bill_invoce
 from .sendSMS import send_SMS,send_Whatsapp,send_Email
+from rest_framework.decorators import api_view
 # Create your views here.
 from rest_framework.parsers import MultiPartParser,FormParser
+
+@api_view(('GET',))
+def getImagePath(request,id): #build this again in React and use Img url .path
+    print(id)
+    img_name = Bill_invoce.objects.filter(user_id=id).values("logo") #apply a try catch blob here
+    img_path = '/media/'+img_name[0]['logo']
+    return Response({"path":img_path},status= status.HTTP_200_OK)
 class getBankTable(APIView):
     def get(self,request,id):
         serializer = GetBankTable(data = request.data)
@@ -250,3 +258,4 @@ class BillInvoiceDetails(APIView):
             return Response(Data,status=status.HTTP_200_OK)
         else:
             return Response(False,status=status.HTTP_200_OK)
+
