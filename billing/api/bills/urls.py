@@ -1,8 +1,9 @@
 from django.urls import path, include
 from rest_framework import routers
 from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect,BillInvoiceDetails,getImagePath
-
+from . import views
 router = routers.DefaultRouter()
+router.register(r'getInvoice', views.BillInvoiceDetails,basename="InvoiceLogo") #register a path for category router coming from api urls!
 
 urlpatterns = [
     path("getBank/HO/<int:id>",getBankTable.as_view(),name="Banks"),
@@ -36,8 +37,9 @@ urlpatterns = [
     path("admin/sendmessageE",EmailMessageService.as_view()), # passes bank id from table    
     path("HO/fetchtemplates",GetTemplatesList.as_view()), # passes bank id from table 
     path("bank/selectbank/<int:id>",BankSelect.as_view()),   
-    path("getInvoice/<int:id>",BillInvoiceDetails.as_view()),
-    path("getImg/path/<int:id>",getImagePath,name="MediaImage"),
+    path('', include(router.urls))
+    # path("getInvoice/<int:id>",views.BillInvoiceDetails),
+    # path("getImg/path/<int:id>",getImagePath,name="MediaImage"),
 
     
     # path("admin/sendmessageMOS",MessageService.as_view()), # passes bank id from table    

@@ -10,6 +10,7 @@ from .sendSMS import send_SMS,send_Whatsapp,send_Email
 from rest_framework.decorators import api_view
 # Create your views here.
 from rest_framework.parsers import MultiPartParser,FormParser
+from rest_framework import viewsets
 
 @api_view(('GET',))
 def getImagePath(request,id): #build this again in React and use Img url .path
@@ -250,12 +251,12 @@ class GetTemplatesList(APIView):
         else:
             return Response("Unable To fetch",status=status.HTTP_200_OK)
         
-class BillInvoiceDetails(APIView):
-    def get(self,request,id):
-        serializer = GetBillInvoice(data=request.data)
-        if serializer.is_valid():
-            Data = serializer.getInvoiceDetails(id)
-            return Response(Data,status=status.HTTP_200_OK)
-        else:
-            return Response(False,status=status.HTTP_200_OK)
+class BillInvoiceDetails(viewsets.ModelViewSet):
+    queryset = Bill_invoce.objects.all().order_by('id')
+    serializer_class = GetBillInvoice #(data=request.data)
+        # if serializer.is_valid():
+        #     Data = serializer.getInvoiceDetails(id)
+        #     return Response(Data,status=status.HTTP_200_OK)
+        # else:
+        #     return Response(False,status=status.HTTP_200_OK)
 

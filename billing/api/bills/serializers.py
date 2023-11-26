@@ -410,12 +410,13 @@ class GetTemplates(serializers.ModelSerializer):
         return data
 
 class GetBillInvoice(serializers.ModelSerializer):
+    logo = serializers.ImageField(max_length=None, use_url=True, allow_null=True, required=False)
     class Meta:
         model = Bill_invoce
-        fields = ["id"]
-    def getInvoiceDetails(self,id):
-        data = Bill_invoce.objects.filter(user_id = id).values()
-        if (data):
-            return data
-        else:
-            return 0
+        fields = ["id","additional_option_type","bank_def_id","currency_id","date_time","ecommerce_trader","from_date","gst_shipping_address","invoice_design_temp_id","is_logo_img","logo","logo_text","option_values","reverse_charge","term_condition","till_date","to_bill_ship_applicable","user_id_id"]
+    # def getInvoiceDetails(self,id):
+    #     data = Bill_invoce.objects.filter(user_id = id).values()
+    #     if (data):
+    #         return data
+    #     else:
+    #         return 0
