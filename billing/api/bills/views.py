@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates,GetBillInvoice
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates,GetBillInvoice,GetBillSeries
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -252,11 +252,23 @@ class GetTemplatesList(APIView):
             return Response("Unable To fetch",status=status.HTTP_200_OK)
         
 class BillInvoiceDetails(viewsets.ModelViewSet):
-    queryset = Bill_invoce.objects.all().order_by('id')
+    
     serializer_class = GetBillInvoice #(data=request.data)
+    queryset = Bill_invoce.objects.all().order_by('id')
         # if serializer.is_valid():
         #     Data = serializer.getInvoiceDetails(id)
         #     return Response(Data,status=status.HTTP_200_OK)
         # else:
         #     return Response(False,status=status.HTTP_200_OK)
 
+class BillSeriesDetails(APIView):
+    def get(self,request,id):
+        serializer = GetBillSeries(data = request.data)
+        if serializer.is_valid():
+            resp = serializer.getSeriesDetails(id)
+            if resp !=0:
+                return Response(resp,status=status.HTTP_200_OK)
+            else:
+                return Response(False,status=status.HTTP_200_OK)
+        else:
+            return Response(False,status=status.HTTP_200_OK)

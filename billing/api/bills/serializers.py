@@ -420,3 +420,14 @@ class GetBillInvoice(serializers.ModelSerializer):
     #         return data
     #     else:
     #         return 0
+
+class GetBillSeries(serializers.ModelSerializer):
+    class Meta:
+        model = Bill_Series
+        fields = ["id"]
+    def getSeriesDetails(self,id):
+        data = Bill_Series.objects.filter(user_id = id).values()
+        if data:
+            return data
+        else:
+            return 0
