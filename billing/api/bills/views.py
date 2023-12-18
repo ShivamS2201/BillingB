@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates,GetBillInvoice,GetBillSeries
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates,GetBillInvoice,GetBillSeries,GetBillSeriesCount
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
@@ -272,3 +272,18 @@ class BillSeriesDetails(APIView):
                 return Response(False,status=status.HTTP_200_OK)
         else:
             return Response(False,status=status.HTTP_200_OK)
+
+class BillSeriesCount(APIView):
+    def get(self,request,id):
+        serializer = GetBillSeriesCount(data=request.data)
+        if serializer.is_valid():
+            resp = serializer.getSeriesCount_ByID(id)
+            if resp :
+                return Response(resp,status=status.HTTP_200_OK)
+            else:
+                return Response(False,status=status.HTTP_200_OK)
+            
+        else:
+            return Response(False,status=status.HTTP_200_OK)
+
+

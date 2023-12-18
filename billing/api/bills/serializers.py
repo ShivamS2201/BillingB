@@ -431,3 +431,14 @@ class GetBillSeries(serializers.ModelSerializer):
             return data
         else:
             return 0
+
+class GetBillSeriesCount(serializers.ModelSerializer):
+    class Meta:
+        model=Bill_Series
+        fields = ["id"]
+    def getSeriesCount_ByID(self,id):
+        data = Bill_Series.objects.filter(user_id=id).values()
+        if data:
+            return data.count()
+        else:
+            return 0 
