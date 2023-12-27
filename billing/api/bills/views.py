@@ -1,14 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
-from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates
+from .serializers import GetBankTable,GetCashTable,AddBanks,GetBanks,AddCash,GetCash,AddCategory,AddPlace,AddGroup,GetPlaceTable,GetCategoryTable,GetGroupTable,CustomerSerializer,GetPlace,getCurrency,getExport,AddLimit,GetCustomerCount,GetCustTable,GetMessageTable,AddMessage,GetTemplates,GetBillInvoice,GetBillSeries,GetBillSeriesCount
 from rest_framework.response import Response
 from api.serializers import GetStateCodes,Getdealertype
 from .serializers import GetAccounttype
 from rest_framework import status
-from .models import Bill_Cash,Bill_banks
+from .models import Bill_Cash,Bill_banks,Bill_invoce
 from .sendSMS import send_SMS,send_Whatsapp,send_Email
+from rest_framework.decorators import api_view
 # Create your views here.
 from rest_framework.parsers import MultiPartParser,FormParser
+from rest_framework import viewsets
+
+@api_view(('GET',))
+def getImagePath(request,id): #build this again in React and use Img url .path
+    print(id)
+    img_name = Bill_invoce.objects.filter(user_id=id).values("logo") #apply a try catch blob here
+    img_path = '/media/'+img_name[0]['logo']
+    return Response({"path":img_path},status= status.HTTP_200_OK)
 class getBankTable(APIView):
     def get(self,request,id):
         serializer = GetBankTable(data = request.data)
@@ -241,3 +250,40 @@ class GetTemplatesList(APIView):
             return Response(Table,status=status.HTTP_200_OK)
         else:
             return Response("Unable To fetch",status=status.HTTP_200_OK)
+        
+class BillInvoiceDetails(viewsets.ModelViewSet):
+    
+    serializer_class = GetBillInvoice #(data=request.data)
+    queryset = Bill_invoce.objects.all().order_by('id')
+        # if serializer.is_valid():
+        #     Data = serializer.getInvoiceDetails(id)
+        #     return Response(Data,status=status.HTTP_200_OK)
+        # else:
+        #     return Response(False,status=status.HTTP_200_OK)
+
+class BillSeriesDetails(APIView):
+    def get(self,request,id):
+        serializer = GetBillSeries(data = request.data)
+        if serializer.is_valid():
+            resp = serializer.getSeriesDetails(id)
+            if resp !=0:
+                return Response(resp,status=status.HTTP_200_OK)
+            else:
+                return Response(False,status=status.HTTP_200_OK)
+        else:
+            return Response(False,status=status.HTTP_200_OK)
+
+class BillSeriesCount(APIView):
+    def get(self,request,id):
+        serializer = GetBillSeriesCount(data=request.data)
+        if serializer.is_valid():
+            resp = serializer.getSeriesCount_ByID(id)
+            if resp :
+                return Response(resp,status=status.HTTP_200_OK)
+            else:
+                return Response(False,status=status.HTTP_200_OK)
+            
+        else:
+            return Response(False,status=status.HTTP_200_OK)
+
+

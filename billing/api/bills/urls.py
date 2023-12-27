@@ -1,8 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect
-
+from .views import getBankTable,hoAddBank,StateCodesBank,Accountype,HOgetBank,FetchBankdetail,HOAddCash,getCashTable,FetchCashdetail,Update_Cash,Update_Bank,HOAddCategory,HOAddGroup,HOAddPlace,getPlaceTable,getGroupTable,getCatTable,CustomerView,Placebymaster,RegisterDealerType,CurrencyFetch,ExportFetch,CustomerLimitView,CustCntview,getCustTable,GetMsgTable,MessageService,WhatsappMessageService,EmailMessageService,GetTemplatesList,BankSelect,BillInvoiceDetails,getImagePath,BillSeriesDetails,BillSeriesCount
 router = routers.DefaultRouter()
+router.register(r'getInvoice', BillInvoiceDetails,basename="BillInvoiceDetails") #register a path for category router coming from api urls!
 
 urlpatterns = [
     path("getBank/HO/<int:id>",getBankTable.as_view(),name="Banks"),
@@ -35,7 +35,13 @@ urlpatterns = [
     path("admin/sendmessageW",WhatsappMessageService.as_view()), # passes bank id from table    
     path("admin/sendmessageE",EmailMessageService.as_view()), # passes bank id from table    
     path("HO/fetchtemplates",GetTemplatesList.as_view()), # passes bank id from table 
-    path("bank/selectbank/<int:id>",BankSelect.as_view()),   
+    path("bank/selectbank/<int:id>",BankSelect.as_view()),
+    path("getseries/<int:id>",BillSeriesDetails.as_view()),
+    path("getseriescount/<int:id>",BillSeriesCount.as_view()),
+    path('', include(router.urls))
+    # path("getImg/path/<int:id>",getImagePath,name="MediaImage"),
+
+    
     # path("admin/sendmessageMOS",MessageService.as_view()), # passes bank id from table    
     
 ]

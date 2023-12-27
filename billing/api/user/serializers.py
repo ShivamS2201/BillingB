@@ -109,7 +109,7 @@ class MSGSerializer(serializers.ModelSerializer):
         return res
     def update(self,validated_data):
 
-        print(validated_data["system_credit"])
+        print(validated_data)
         for attr, val in validated_data.items():
            if attr =="user_id":
                value = NewUSER.object.get(pk=val)
