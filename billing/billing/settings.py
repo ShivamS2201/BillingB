@@ -26,11 +26,16 @@ SECRET_KEY = "django-insecure-46q0vtw))p64sn^lj7y*g8zha^v@i*jc@59^ntz2g8j6%_boi)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','http://localhost:3000/','http://localhost:3000/user/dashboard/register/addsales']
+ALLOWED_HOSTS = ['*','http://localhost:3000/','http://localhost:3000/user/dashboard/register/addsales',"13.228.225.19"
+,"18.142.128.26"
+,"54.254.162.138"]
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "13.228.225.19",
+"18.142.128.26",
+"54.254.162.138",
 ]
 CORS_ALLOW_CREDENTIALS = True
 # Application definition
