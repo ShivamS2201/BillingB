@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*','http://localhost:3000/','http://localhost:3000/user/dashbo
 ,"18.142.128.26"
 ,"54.254.162.138"]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "13.228.225.19",
